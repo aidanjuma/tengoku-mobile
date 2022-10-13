@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:tengoku/src/ui/components/navigation/navigation_bar.dart'
+    as nav;
+
+class RootView extends StatefulWidget {
+  const RootView({Key? key}) : super(key: key);
+
+  @override
+  State<RootView> createState() => _RootViewState();
+}
+
+class _RootViewState extends State<RootView> {
+  int _currentIndex = 0;
+
+  static const List<Widget> _pages = [Scaffold(), Scaffold(), Scaffold()];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: nav.NavigationBar(
+        iconSize: 28,
+        items: <nav.NavigationBarItem>[
+          nav.NavigationBarItem(icon: EvaIcons.bulbOutline),
+          nav.NavigationBarItem(icon: EvaIcons.searchOutline),
+          nav.NavigationBarItem(icon: EvaIcons.listOutline),
+        ],
+        onChanged: (int index) {
+          _currentIndex = index;
+          setState(() => {});
+        },
+      ),
+      body: _pages[_currentIndex],
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+}
