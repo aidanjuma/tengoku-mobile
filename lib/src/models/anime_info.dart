@@ -23,7 +23,6 @@ class AnimeInfo extends AnimeResult {
   AnimeInfo({
     required super.id,
     required super.title,
-    super.url,
     super.albumImage,
     super.coverImage,
     super.status,

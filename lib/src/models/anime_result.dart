@@ -5,18 +5,16 @@ import '../types/media_format.dart';
 class AnimeResult {
   final String id;
   final Title title;
-  String? url;
   String? albumImage;
   String? coverImage;
   MediaStatus? status;
-  double? rating;
+  int? rating;
   MediaFormat? format;
   String? releaseDate;
 
   AnimeResult({
     required this.id,
     required this.title,
-    this.url,
     this.albumImage,
     this.coverImage,
     this.status,
