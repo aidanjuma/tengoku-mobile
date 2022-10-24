@@ -4,6 +4,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 class DiscoverView extends StatelessWidget {
   const DiscoverView({super.key});
 
+  final lexendMedium = const TextStyle(
+    fontFamily: 'Lexend',
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
+  );
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -16,7 +22,7 @@ class DiscoverView extends StatelessWidget {
         preferredSize: Size.fromHeight(height * 0.15),
         child: Container(
           margin: EdgeInsets.symmetric(
-            horizontal: width * 0.075,
+            horizontal: width * 0.05,
             vertical: height * 0.05,
           ),
           child: const Align(
@@ -107,13 +113,9 @@ class DiscoverView extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.only(left: 5),
-                                      child: const Text(
+                                      child: Text(
                                         '8.6/10',
-                                        style: TextStyle(
-                                          fontFamily: 'Lexend',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
-                                        ),
+                                        style: lexendMedium,
                                       ),
                                     ),
                                   ],
@@ -128,7 +130,26 @@ class DiscoverView extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: width * 0.05,
+              vertical: height * 0.025,
+            ),
+            width: double.infinity,
+            height: height * 0.225,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Trending Right Now',
+                  style: lexendMedium,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
