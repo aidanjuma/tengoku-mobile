@@ -11,6 +11,7 @@ class DiscoverView extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      /* Header with Tengoku Logo */
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.15),
         child: Container(
@@ -28,19 +29,23 @@ class DiscoverView extends StatelessWidget {
           ),
         ),
       ),
+      /* Body: Banner BG Image, Basic Info & Cover Image for Featured Content */
       body: Column(
         children: <Widget>[
           SizedBox(
             width: double.infinity,
-            height: height * 0.4,
+            height: height * 0.475,
             child: Stack(
-              fit: StackFit.expand,
+              fit: StackFit.loose,
               children: <Widget>[
-                DecoratedBox(
+                /* Banner BG Image */
+                Container(
+                  width: double.infinity,
+                  height: height * 0.425,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: const NetworkImage(
-                        'https://s4.anilist.co/file/anilistcdn/media/anime/banner/142838-tynuN00wxmKO.jpg',
+                      image: const AssetImage(
+                        'assets/images/featured/spy-x-family-part-2-banner.jpg',
                       ),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
@@ -50,53 +55,75 @@ class DiscoverView extends StatelessWidget {
                     ),
                   ),
                 ),
+                /* Container - Push content away from edges (pad out) */
                 Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: width * 0.1,
-                    vertical: height * 0.1,
-                  ),
-                  child: FittedBox(
-                    alignment: Alignment.bottomRight,
-                    fit: BoxFit.scaleDown,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        const Text(
-                          'SPY×FAMILY Part 2',
-                          style: TextStyle(
-                            fontFamily: 'DM Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22,
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      /* Left: Cover Image */
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(4),
+                          child: SizedBox(
+                            width: 160,
+                            height: 226,
+                            child: Image.asset(
+                              'assets/images/featured/spy-x-family-part-2-cover.jpg',
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                      ),
+                      /* Right: Basic Info */
+                      Align(
+                        alignment: Alignment.center,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
-                              const Icon(
-                                EvaIcons.star,
-                                size: 18,
-                                color: Color(0xfff7d16f),
+                              const Text(
+                                'SPY×FAMILY Part 2',
+                                style: TextStyle(
+                                  fontFamily: 'DM Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 22,
+                                ),
                               ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: const Text(
-                                  '8.6/10',
-                                  style: TextStyle(
-                                    fontFamily: 'Lexend',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                  ),
+                              SizedBox(
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Icon(
+                                      EvaIcons.star,
+                                      size: 18,
+                                      color: Color(0xfff7d16f),
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: const Text(
+                                        '8.6/10',
+                                        style: TextStyle(
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
