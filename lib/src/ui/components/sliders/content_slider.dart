@@ -14,7 +14,7 @@ class ContentSlider extends StatelessWidget {
     return ListView.builder(
       itemCount: cards.length,
       scrollDirection: Axis.horizontal,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         // TODO: Implement ContentCard Widget (see respective file)
         return const ContentCard(
           anilistId: '12345',
