@@ -17,6 +17,7 @@ class ContentSlider extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         // TODO: Implement ContentCard Widget (see respective file)
         return const ContentCard(
+          anilistId: '12345',
           title: 'Content Title',
           coverImageUrl: 'Cover Image URL',
         );
