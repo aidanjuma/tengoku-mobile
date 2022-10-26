@@ -10,7 +10,7 @@ class AnimeResult {
   MediaStatus? status;
   int? rating;
   MediaFormat? format;
-  String? releaseDate;
+  int? releaseDate;
 
   AnimeResult({
     required this.id,

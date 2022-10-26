@@ -80,7 +80,9 @@ class ConsumetService {
         status: utils.evaluateMediaStatus(item['status']),
         rating: item['rating'],
         // MediaFormat? Find/check return from API.
-        releaseDate: item['releaseDate'],
+        releaseDate: item['releaseDate'] is String
+            ? int.parse(item['releaseDate'])
+            : item['releaseDate'],
       );
 
       animes.add(anime);
