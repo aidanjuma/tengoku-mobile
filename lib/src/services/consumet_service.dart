@@ -19,7 +19,7 @@ class ConsumetService {
     final Uri url =
         Uri.parse('$anilistUrl/$query?page=$page&perPage=$resultsPerPage');
 
-    final Map<String, dynamic> results = await _makeGetRequest(() async {
+    final List<dynamic> results = await _makeGetRequest(() async {
       Response response = await _client.get(url);
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data['results'];
@@ -36,7 +36,7 @@ class ConsumetService {
     final Uri url =
         Uri.parse('$anilistUrl/trending?page=$page&perPage=$resultsPerPage');
 
-    final Map<String, dynamic> results = await _makeGetRequest(() async {
+    final List<dynamic> results = await _makeGetRequest(() async {
       Response response = await _client.get(url);
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data['results'];
@@ -64,7 +64,7 @@ class ConsumetService {
     }
   }
 
-  List<AnimeResult> _processResults(Map<String, dynamic> results) {
+  List<AnimeResult> _processResults(List<dynamic> results) {
     List<AnimeResult> animes = [];
     for (int i = 0; i < results.length; i++) {
       final item = results[i];
