@@ -1,12 +1,12 @@
-import '../types/title.dart';
+import '../types/item_title.dart';
 import '../types/media_status.dart';
 import '../types/media_format.dart';
 
 class AnimeResult {
   final String id;
-  final Title title;
-  String? albumImage;
+  final ItemTitle title;
   String? coverImage;
+  String? bannerImage;
   MediaStatus? status;
   int? rating;
   MediaFormat? format;
@@ -15,8 +15,8 @@ class AnimeResult {
   AnimeResult({
     required this.id,
     required this.title,
-    this.albumImage,
     this.coverImage,
+    this.bannerImage,
     this.status,
     this.rating,
     this.format,

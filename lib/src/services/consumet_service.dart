@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
-import 'package:tengoku/src/types/title.dart';
+import 'package:tengoku/src/types/item_title.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/utils/global.dart' as utils;
 
@@ -70,13 +70,14 @@ class ConsumetService {
       final item = results[i];
       final AnimeResult anime = AnimeResult(
         id: item['id'],
-        title: Title(
-          romaji: item['romaji'],
-          english: item['english'],
-          native: item['native'],
+        title: ItemTitle(
+          romaji: item['title']['romaji'],
+          english: item['title']['english'],
+          native: item['title']['native'],
+          userPreferred: item['title']['userPreferred'],
         ),
-        albumImage: item['image'],
-        coverImage: item['cover'],
+        coverImage: item['image'],
+        bannerImage: item['cover'],
         status: utils.evaluateMediaStatus(item['status']),
         rating: item['rating'],
         // MediaFormat? Find/check return from API.

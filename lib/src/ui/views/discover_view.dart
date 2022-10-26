@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
+import 'package:tengoku/src/ui/components/cards/content_card.dart';
+import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
 
-class DiscoverView extends StatelessWidget {
+class DiscoverView extends StatefulWidget {
   const DiscoverView({super.key});
 
-  final lexendMedium = const TextStyle(
-    fontFamily: 'Lexend',
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-  );
+  @override
+  State<DiscoverView> createState() => _DiscoverViewState();
+}
 
+class _DiscoverViewState extends State<DiscoverView> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -113,9 +117,13 @@ class DiscoverView extends StatelessWidget {
                                     ),
                                     Container(
                                       padding: const EdgeInsets.only(left: 5),
-                                      child: Text(
+                                      child: const Text(
                                         '8.6/10',
-                                        style: lexendMedium,
+                                        style: TextStyle(
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -137,15 +145,46 @@ class DiscoverView extends StatelessWidget {
               vertical: height * 0.025,
             ),
             width: double.infinity,
-            height: height * 0.225,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
+            height: height * 0.25,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  'Trending Right Now',
-                  style: lexendMedium,
+                Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: const Text(
+                    'Trending Right Now',
+                    style: TextStyle(
+                      fontFamily: 'Lexend',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Consumer<ConsumetProvider>(
+                  builder: (context, provider, child) {
+                    List<AnimeResult> trendingAnime = provider.trendingAnime;
+
+                    if (trendingAnime.isNotEmpty) {
+                      List<ContentCard> cards = [];
+                      for (int i = 0; i < trendingAnime.length; i++) {
+                        cards.add(
+                          ContentCard(
+                            anilistId: trendingAnime[i].id,
+                            title: trendingAnime[i].title,
+                            coverImageUrl: trendingAnime[i].coverImage,
+                            spacing: i < trendingAnime.length
+                                ? const EdgeInsets.only(right: 12)
+                                : const EdgeInsets.only(left: 12),
+                          ),
+                        );
+                      }
+
+                      return ContentSlider(cards: cards);
+                    }
+                    return Container();
+                  },
                 ),
               ],
             ),
@@ -153,5 +192,19 @@ class DiscoverView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<ConsumetProvider>(context, listen: false)
+          .getTrendingAnime(null, null);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }
