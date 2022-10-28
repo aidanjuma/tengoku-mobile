@@ -20,6 +20,7 @@ class _RootViewState extends State<RootView> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: nav.NavigationBar(
+        height: 80,
         iconSize: 28,
         items: <nav.NavigationBarItem>[
           nav.NavigationBarItem(icon: EvaIcons.bulbOutline),
