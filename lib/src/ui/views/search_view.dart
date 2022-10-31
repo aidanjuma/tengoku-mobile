@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/utils/debouncer.dart';
+import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
+import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
+import 'package:tengoku/src/ui/components/panels/tiles/search_result_tile.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -24,9 +27,11 @@ class _SearchViewState extends State<SearchView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.2),
         child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: width * 0.05,
-            vertical: height * 0.1,
+          margin: EdgeInsets.only(
+            top: height * 0.1,
+            left: width * 0.05,
+            right: width * 0.05,
+            bottom: height * 0.035,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -57,6 +62,34 @@ class _SearchViewState extends State<SearchView> {
               ),
             ],
           ),
+        ),
+      ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+        child: Consumer<ConsumetProvider>(
+          builder: ((context, provider, child) {
+            List<AnimeResult> animeResults = provider.animeResults;
+
+            if (animeResults.isNotEmpty) {
+              List<SearchResultTile> tiles = [];
+              for (int i = 0; i < animeResults.length; i++) {
+                tiles.add(
+                  SearchResultTile(
+                    anilistId: animeResults[i].id,
+                    title: animeResults[i].title,
+                    spacing: const EdgeInsets.symmetric(vertical: 12),
+                    coverImageUrl: animeResults[i].coverImage,
+                  ),
+                );
+              }
+
+              return ContentSlider(
+                direction: Axis.vertical,
+                panels: tiles,
+              );
+            }
+            return Container();
+          }),
         ),
       ),
     );

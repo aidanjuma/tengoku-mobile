@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class ContentSlider extends StatelessWidget {
   final Axis direction;
-  final List<Widget> cards;
+  final List<Widget> panels;
 
   const ContentSlider({
     super.key,
     required this.direction,
-    required this.cards,
+    required this.panels,
   });
 
   @override
@@ -16,10 +16,10 @@ class ContentSlider extends StatelessWidget {
       child: ListView.builder(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
-        itemCount: cards.length,
+        itemCount: panels.length,
         scrollDirection: direction,
         itemBuilder: (context, index) {
-          return cards[index];
+          return panels[index];
         },
       ),
     );

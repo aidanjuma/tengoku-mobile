@@ -183,7 +183,7 @@ class _DiscoverViewState extends State<DiscoverView> {
 
                       return ContentSlider(
                         direction: Axis.horizontal,
-                        cards: cards,
+                        panels: cards,
                       );
                     }
                     return Container();

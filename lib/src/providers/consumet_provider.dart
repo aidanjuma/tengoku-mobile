@@ -7,8 +7,8 @@ class ConsumetProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
-  List<AnimeResult> _animeSearchResults = [];
-  List<AnimeResult> get animeSearchResults => _animeSearchResults;
+  List<AnimeResult> _animeResults = [];
+  List<AnimeResult> get animeResults => _animeResults;
 
   List<AnimeResult> _trendingAnime = [];
   List<AnimeResult> get trendingAnime => _trendingAnime;
@@ -21,7 +21,7 @@ class ConsumetProvider extends ChangeNotifier {
     final results =
         await _service.basicAnimeSearch(query, page, resultsPerPage);
 
-    _animeSearchResults = results!;
+    _animeResults = results!;
     isLoading = false;
     notifyListeners();
   }
