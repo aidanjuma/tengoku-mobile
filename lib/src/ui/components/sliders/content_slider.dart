@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ContentSlider extends StatelessWidget {
+  final Axis direction;
   final List<Widget> cards;
 
   const ContentSlider({
     super.key,
+    required this.direction,
     required this.cards,
   });
 
@@ -15,7 +17,7 @@ class ContentSlider extends StatelessWidget {
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
         itemCount: cards.length,
-        scrollDirection: Axis.horizontal,
+        scrollDirection: direction,
         itemBuilder: (context, index) {
           return cards[index];
         },

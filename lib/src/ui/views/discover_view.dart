@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/ui/components/cards/content_card.dart';
+import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
 
 class DiscoverView extends StatefulWidget {
@@ -181,7 +181,10 @@ class _DiscoverViewState extends State<DiscoverView> {
                         );
                       }
 
-                      return ContentSlider(cards: cards);
+                      return ContentSlider(
+                        direction: Axis.horizontal,
+                        cards: cards,
+                      );
                     }
                     return Container();
                   },
