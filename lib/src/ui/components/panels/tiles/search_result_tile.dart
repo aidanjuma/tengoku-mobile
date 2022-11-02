@@ -18,12 +18,15 @@ class SearchResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return BouncingWidget(
       scaleFactor: 0.25,
       duration: const Duration(milliseconds: 50),
       child: Container(
         margin: spacing,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               width: 100,
@@ -40,6 +43,44 @@ class SearchResultTile extends StatelessWidget {
                 ),
               ),
             ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 12)),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title.userPreferred ?? title.romaji!,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  title.native != null
+                      ? Text(
+                          title.native!,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontFamily: 'Zen Maru Gothic',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: colors.onSurface,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
+            )
           ],
         ),
       ),
