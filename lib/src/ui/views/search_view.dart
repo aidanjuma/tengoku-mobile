@@ -75,10 +75,8 @@ class _SearchViewState extends State<SearchView> {
               for (int i = 0; i < animeResults.length; i++) {
                 tiles.add(
                   SearchResultTile(
-                    anilistId: animeResults[i].id,
-                    title: animeResults[i].title,
+                    result: animeResults[i],
                     spacing: const EdgeInsets.symmetric(vertical: 12),
-                    coverImageUrl: animeResults[i].coverImage,
                   ),
                 );
               }

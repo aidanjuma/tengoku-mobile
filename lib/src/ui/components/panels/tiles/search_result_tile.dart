@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/types/item_title.dart';
+import 'package:tengoku/src/ui/views/info_view.dart';
+import 'package:tengoku/src/models/anime_result.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 
 class SearchResultTile extends StatelessWidget {
-  final String anilistId;
-  final ItemTitle title;
+  final AnimeResult result;
   final EdgeInsets spacing;
-  final String? coverImageUrl;
 
   const SearchResultTile({
     super.key,
-    required this.anilistId,
-    required this.title,
+    required this.result,
     required this.spacing,
-    required this.coverImageUrl,
   });
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return BouncingWidget(
       scaleFactor: 0.25,
       duration: const Duration(milliseconds: 50),
+      onPressed: () => _pushToInfoView(context, result),
       child: Container(
         margin: spacing,
         child: Row(
@@ -34,7 +33,7 @@ class SearchResultTile extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(
-                  image: NetworkImage(coverImageUrl!),
+                  image: NetworkImage(result.coverImage!),
                   fit: BoxFit.cover,
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.25),
@@ -53,7 +52,7 @@ class SearchResultTile extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          title.userPreferred ?? title.romaji!,
+                          result.title.userPreferred ?? result.title.romaji!,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -65,9 +64,9 @@ class SearchResultTile extends StatelessWidget {
                       ),
                     ],
                   ),
-                  title.native != null
+                  result.title.native != null
                       ? Text(
-                          title.native!,
+                          result.title.native!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -84,7 +83,14 @@ class SearchResultTile extends StatelessWidget {
           ],
         ),
       ),
-      onPressed: () => {},
+    );
+  }
+
+  _pushToInfoView(BuildContext context, AnimeResult data) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => InfoView(initialData: data),
+      ),
     );
   }
 }
