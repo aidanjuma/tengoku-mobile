@@ -84,7 +84,7 @@ class ConsumetService {
       season: utils.evaluateSeason(data['season']),
       studios: data['studios'],
       color: data['color'],
-      // TODO: Episodes... CREATE ANIME EPISODE MODEL!
+      // TODO: Episodes (implement _processEpisodes or similar)
       recommendations: _processResults(data['recommendations']),
       relations: _processResults(data['relations']),
     );

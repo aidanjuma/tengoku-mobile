@@ -1,4 +1,5 @@
 import 'anime_result.dart';
+import 'anime_episode.dart';
 import '../types/sub_or_dub.dart';
 import '../types/seasons.dart';
 
@@ -16,7 +17,7 @@ class AnimeInfo extends AnimeResult {
   Seasons? season;
   List<String>? studios;
   String? color;
-  // TODO: Episodes (AnimeEpisode model)
+  List<AnimeEpisode>? episodes;
   List<AnimeResult>? recommendations;
   List<AnimeResult>? relations;
 
@@ -41,6 +42,7 @@ class AnimeInfo extends AnimeResult {
     this.season,
     this.studios,
     this.color,
+    this.episodes,
     this.recommendations,
     this.relations,
   });
