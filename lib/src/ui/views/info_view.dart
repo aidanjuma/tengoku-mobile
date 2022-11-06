@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 
 class InfoView extends StatefulWidget {
@@ -19,6 +20,7 @@ class _InfoViewState extends State<InfoView> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -43,7 +45,7 @@ class _InfoViewState extends State<InfoView> {
         children: <Widget>[
           SizedBox(
             width: double.infinity,
-            height: height * 0.475,
+            height: height * 0.405,
             child: Stack(
               fit: StackFit.loose,
               children: <Widget>[
@@ -59,9 +61,11 @@ class _InfoViewState extends State<InfoView> {
                       alignment: Alignment.bottomCenter,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: SizedBox(
-                          width: 160,
-                          height: 226,
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            maxWidth: 150,
+                            maxHeight: 212,
+                          ),
                           child: Image.network(
                             widget.initialData.coverImage!,
                           ),
@@ -71,6 +75,76 @@ class _InfoViewState extends State<InfoView> {
                   ],
                 ),
               ],
+            ),
+          ),
+          /* Padding, Text for Titles (Romaji | Native) */
+          Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: height * 0.01,
+              horizontal: width * 0.025,
+            ),
+            child: Column(
+              children: <Text>[
+                Text(
+                  widget.initialData.title.romaji ??
+                      widget.initialData.title.userPreferred!,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontFamily: 'DM Sans',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 22,
+                  ),
+                ),
+                Text(
+                  widget.initialData.title.native ??
+                      widget.initialData.title.userPreferred!,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontFamily: 'Zen Maru Gothic',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: colors.onSurface,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          /* Play Button */
+          BouncingWidget(
+            scaleFactor: 0.5,
+            duration: const Duration(milliseconds: 200),
+            onPressed: () => {},
+            child: Container(
+              width: width * 0.2,
+              height: height * 0.045,
+              margin: EdgeInsets.symmetric(vertical: height * 0.015),
+              padding: EdgeInsets.only(
+                left: width * 0.02,
+                right: width * 0.03,
+              ),
+              decoration: BoxDecoration(
+                color: colors.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: const <Widget>[
+                  Icon(EvaIcons.arrowRight),
+                  Text(
+                    'Play',
+                    style: TextStyle(
+                      fontFamily: 'DM Sans',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -87,7 +161,7 @@ class _InfoViewState extends State<InfoView> {
 
     return Container(
       width: double.infinity,
-      height: height * 0.425,
+      height: height * 0.355,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(banner),

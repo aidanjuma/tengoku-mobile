@@ -78,9 +78,11 @@ class _DiscoverViewState extends State<DiscoverView> {
                         alignment: Alignment.bottomCenter,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(4),
-                          child: SizedBox(
-                            width: 160,
-                            height: 226,
+                          child: Container(
+                            constraints: const BoxConstraints(
+                              maxWidth: 160,
+                              maxHeight: 226,
+                            ),
                             child: Image.asset(
                               'assets/images/featured/spy-x-family-part-2-cover.jpg',
                             ),
@@ -171,9 +173,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                       for (int i = 0; i < trendingAnime.length; i++) {
                         cards.add(
                           ContentCard(
-                            anilistId: trendingAnime[i].id,
-                            title: trendingAnime[i].title,
-                            coverImageUrl: trendingAnime[i].coverImage,
+                            result: trendingAnime[i],
                             spacing: i < trendingAnime.length
                                 ? const EdgeInsets.only(right: 12)
                                 : const EdgeInsets.only(left: 12),
@@ -186,7 +186,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                         panels: cards,
                       );
                     }
-                    return Container();
+                    return const SizedBox.shrink();
                   },
                 ),
               ],

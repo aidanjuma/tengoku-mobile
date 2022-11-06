@@ -27,7 +27,7 @@ class NavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currentIndex = moveIndicator.value;
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final colors = Theme.of(context).colorScheme;
 
     return Container(
       height: height,

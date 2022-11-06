@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/ui/views/info_view.dart';
+import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 
@@ -15,12 +15,12 @@ class SearchResultTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colors = Theme.of(context).colorScheme;
+    final colors = Theme.of(context).colorScheme;
 
     return BouncingWidget(
       scaleFactor: 0.25,
       duration: const Duration(milliseconds: 50),
-      onPressed: () => _pushToInfoView(context, result),
+      onPressed: () => pushToInfoView(context, result),
       child: Container(
         margin: spacing,
         child: Row(
@@ -82,14 +82,6 @@ class SearchResultTile extends StatelessWidget {
             )
           ],
         ),
-      ),
-    );
-  }
-
-  _pushToInfoView(BuildContext context, AnimeResult data) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => InfoView(initialData: data),
       ),
     );
   }

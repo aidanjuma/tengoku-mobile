@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/types/item_title.dart';
+import 'package:tengoku/src/utils/global.dart';
+import 'package:tengoku/src/models/anime_result.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 
 class ContentCard extends StatelessWidget {
-  final String anilistId;
-  final ItemTitle title;
+  final AnimeResult result;
   final EdgeInsets spacing;
-  final String? coverImageUrl;
 
   const ContentCard({
     super.key,
-    required this.anilistId,
-    required this.title,
+    required this.result,
     required this.spacing,
-    this.coverImageUrl,
   });
 
   @override
@@ -21,6 +18,7 @@ class ContentCard extends StatelessWidget {
     return BouncingWidget(
       scaleFactor: 0.5,
       duration: const Duration(milliseconds: 50),
+      onPressed: () => pushToInfoView(context, result),
       child: Container(
         width: 100,
         height: 142,
@@ -28,7 +26,7 @@ class ContentCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
-            image: NetworkImage(coverImageUrl!),
+            image: NetworkImage(result.coverImage!),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.25),
@@ -44,7 +42,7 @@ class ContentCard extends StatelessWidget {
             bottom: 8,
           ),
           child: Text(
-            title.userPreferred ?? title.romaji!,
+            result.title.userPreferred ?? result.title.romaji!,
             textAlign: TextAlign.center,
             style: const TextStyle(
               fontFamily: 'DM Sans',
@@ -54,8 +52,6 @@ class ContentCard extends StatelessWidget {
           ),
         ),
       ),
-      // TODO: Navigate to Page...
-      onPressed: () => {},
     );
   }
 }

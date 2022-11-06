@@ -86,7 +86,7 @@ class _SearchViewState extends State<SearchView> {
                 panels: tiles,
               );
             }
-            return Container();
+            return const SizedBox.shrink();
           }),
         ),
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Themes {
   // Consistent Colors:
-  static const primaryColor = Color(0xff316dca);
+  static const primaryColor = Color(0xff76a1fa);
   static const errorColor = Color(0xb3ff6961);
   static const pureWhite = Color(0xffffffff);
 
