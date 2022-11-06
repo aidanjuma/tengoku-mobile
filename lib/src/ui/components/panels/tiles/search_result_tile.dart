@@ -30,6 +30,7 @@ class SearchResultTile extends StatelessWidget {
             Container(
               width: 100,
               height: 142,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 image: DecorationImage(

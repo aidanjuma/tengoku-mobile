@@ -76,15 +76,16 @@ class _DiscoverViewState extends State<DiscoverView> {
                       /* Left: Cover Image */
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(
-                            constraints: const BoxConstraints(
-                              maxWidth: 160,
-                              maxHeight: 226,
-                            ),
-                            child: Image.asset(
-                              'assets/images/featured/spy-x-family-part-2-cover.jpg',
+                        child: Container(
+                          width: 160,
+                          height: 226,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                'assets/images/featured/spy-x-family-part-2-cover.jpg',
+                              ),
                             ),
                           ),
                         ),

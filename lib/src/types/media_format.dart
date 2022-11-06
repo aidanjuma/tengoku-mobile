@@ -8,5 +8,6 @@ enum MediaFormat {
   music,
   manga,
   novel,
-  oneShot
+  oneShot,
+  unknown
 }

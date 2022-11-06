@@ -17,8 +17,8 @@ class AnimeInfo extends AnimeResult {
   List<String>? studios;
   String? color;
   // TODO: Episodes (AnimeEpisode model)
-  AnimeResult? recommendations;
-  AnimeResult? relations;
+  List<AnimeResult>? recommendations;
+  List<AnimeResult>? relations;
 
   AnimeInfo({
     required super.id,

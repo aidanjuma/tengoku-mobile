@@ -23,6 +23,7 @@ class ContentCard extends StatelessWidget {
         width: 100,
         height: 142,
         margin: spacing,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(

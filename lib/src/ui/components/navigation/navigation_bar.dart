@@ -30,8 +30,9 @@ class NavigationBar extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      height: height,
       width: width,
+      height: height,
+      clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: colors.surface,

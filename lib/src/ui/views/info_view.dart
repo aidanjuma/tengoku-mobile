@@ -59,15 +59,16 @@ class _InfoViewState extends State<InfoView> {
                     /* Center: Cover Image */
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4),
-                        child: Container(
-                          constraints: const BoxConstraints(
-                            maxWidth: 150,
-                            maxHeight: 212,
-                          ),
-                          child: Image.network(
-                            widget.initialData.coverImage!,
+                      child: Container(
+                        width: 150,
+                        height: 212,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              widget.initialData.coverImage!,
+                            ),
                           ),
                         ),
                       ),
@@ -112,7 +113,6 @@ class _InfoViewState extends State<InfoView> {
               ],
             ),
           ),
-
           /* Play Button */
           BouncingWidget(
             scaleFactor: 0.5,
@@ -121,7 +121,7 @@ class _InfoViewState extends State<InfoView> {
             child: Container(
               width: width * 0.2,
               height: height * 0.045,
-              margin: EdgeInsets.symmetric(vertical: height * 0.015),
+              margin: EdgeInsets.symmetric(vertical: height * 0.005),
               padding: EdgeInsets.only(
                 left: width * 0.02,
                 right: width * 0.03,
