@@ -1,1 +1,1 @@
-enum SubOrDub { sub, dub, both }
+enum SubOrDub { sub, dub, both, unknown }

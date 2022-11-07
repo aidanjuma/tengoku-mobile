@@ -2,9 +2,11 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:tengoku/src/types/genres.dart';
 import 'package:tengoku/src/types/item_title.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/utils/global.dart' as utils;
 
 class ConsumetService {
@@ -26,9 +28,9 @@ class ConsumetService {
       return data['results'];
     });
 
-    final List<AnimeResult>? animes = _processResults(results);
+    final List<AnimeResult>? animeList = _processResults(results);
 
-    return animes;
+    return animeList;
   }
 
   /* Get Trending Anime (https://api.consumet.org/meta/anilist/trending) */
@@ -43,14 +45,13 @@ class ConsumetService {
       return data['results'];
     });
 
-    final List<AnimeResult>? animes = _processResults(results);
+    final List<AnimeResult>? animeList = _processResults(results);
 
-    return animes;
+    return animeList;
   }
 
   /* Get Anime Info (incl. Episodes) (https://api.consumet.org/meta/anilist/info/{id}) */
-  Future<AnimeInfo> getAnimeInfoWithEpisodes(
-      String id, String? provider) async {
+  Future<AnimeInfo> getAnimeInfoWithEpisodes(int id, String? provider) async {
     final Uri url = Uri.parse('$anilistUrl/info/$id?provider=$provider');
 
     final Map<String, dynamic> data = await _makeGetRequest(() async {
@@ -59,6 +60,7 @@ class ConsumetService {
       return data;
     });
 
+    // TODO: Implement 'characters' into the model.
     final AnimeInfo animeInfo = AnimeInfo(
       id: id,
       title: ItemTitle(
@@ -73,20 +75,20 @@ class ConsumetService {
       format: utils.evaluateMediaFormat(data['type']),
       releaseDate: data['releaseDate'],
       malId: data['malId'],
-      genres: data['genres'],
+      genres: _processGenres(data['genres']),
       description: data['description'],
       episodeCount: data['totalEpisodes'],
       subOrDub: utils.evaluateSubOrDub(data['subOrDub']),
-      synonyms: data['synonyms'],
+      synonyms: _dynamicListToStringList(data['synonyms']),
       originCountry: data['countryOfOrigin'],
       isAdult: data['isAdult'],
       isLicensed: data['isLicensed'],
       season: utils.evaluateSeason(data['season']),
-      studios: data['studios'],
+      studios: _dynamicListToStringList(data['studios']),
       color: data['color'],
-      // TODO: Episodes (implement _processEpisodes or similar)
       recommendations: _processResults(data['recommendations']),
       relations: _processResults(data['relations']),
+      episodes: _processEpisodes(data['episodes']),
     );
 
     return animeInfo;
@@ -110,11 +112,11 @@ class ConsumetService {
   }
 
   List<AnimeResult>? _processResults(List<dynamic> results) {
-    List<AnimeResult> animes = [];
+    List<AnimeResult> animeList = [];
     for (int i = 0; i < results.length; i++) {
       final item = results[i];
       final AnimeResult anime = AnimeResult(
-        id: item['id'],
+        id: item['id'] is int ? item['id'] : int.parse(item['id']),
         title: ItemTitle(
           romaji: item['title']['romaji'],
           english: item['title']['english'],
@@ -131,9 +133,52 @@ class ConsumetService {
             : item['releaseDate'],
       );
 
-      animes.add(anime);
+      animeList.add(anime);
     }
 
-    return animes;
+    return animeList;
+  }
+
+  List<String>? _dynamicListToStringList(List<dynamic> dynamicList) {
+    List<String>? stringList = [];
+
+    for (int i = 0; i < dynamicList.length; i++) {
+      final item = dynamicList[i];
+      item is String ? stringList.add(item) : stringList.add(item.toString());
+    }
+
+    return stringList;
+  }
+
+  List<Genres>? _processGenres(List<dynamic> genres) {
+    List<Genres> genreList = [];
+
+    for (int i = 0; i < genres.length; i++) {
+      final item = genres[i];
+      if (item is String) genreList.add(utils.evaluateGenre(genres[i]));
+    }
+
+    return genreList;
+  }
+
+  List<AnimeEpisode>? _processEpisodes(List<dynamic> episodes) {
+    List<AnimeEpisode> episodeList = [];
+    for (int i = 0; i < episodes.length; i++) {
+      final item = episodes[i];
+      final AnimeEpisode episode = AnimeEpisode(
+        id: item['id'],
+        number: item['number'],
+        title: item['title'],
+        description: item['description'],
+        isFiller: item['isFiller'],
+        url: item['url'],
+        image: item['image'],
+        releaseDate: item['releaseDate'],
+      );
+
+      episodeList.add(episode);
+    }
+
+    return episodeList;
   }
 }

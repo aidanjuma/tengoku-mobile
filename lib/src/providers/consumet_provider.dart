@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/services/consumet_service.dart';
 
@@ -13,12 +14,15 @@ class ConsumetProvider extends ChangeNotifier {
   List<AnimeResult> _trendingAnime = [];
   List<AnimeResult> get trendingAnime => _trendingAnime;
 
+  late AnimeInfo _currentAnimeInfo;
+  AnimeInfo get currentAnimeInfo => _currentAnimeInfo;
+
   Future<void> basicAnimeSearch(
       String query, int? page, int? resultsPerPage) async {
     isLoading = true;
     notifyListeners();
 
-    final results =
+    final List<AnimeResult>? results =
         await _service.basicAnimeSearch(query, page, resultsPerPage);
 
     _animeResults = results!;
@@ -30,9 +34,22 @@ class ConsumetProvider extends ChangeNotifier {
     isLoading = true;
     notifyListeners();
 
-    final results = await _service.getTrendingAnime(page, resultsPerPage);
+    final List<AnimeResult>? results =
+        await _service.getTrendingAnime(page, resultsPerPage);
 
     _trendingAnime = results!;
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getAnimeInfoWithEpisodes(int id, String? provider) async {
+    isLoading = true;
+    notifyListeners();
+
+    final AnimeInfo animeInfo =
+        await _service.getAnimeInfoWithEpisodes(id, provider);
+
+    _currentAnimeInfo = animeInfo;
     isLoading = false;
     notifyListeners();
   }

@@ -1,0 +1,22 @@
+enum Genres {
+  action,
+  adventure,
+  cars,
+  comedy,
+  drama,
+  ecchi,
+  fantasy,
+  horror,
+  mahouShoujo,
+  mecha,
+  music,
+  mystery,
+  psychological,
+  romance,
+  sciFi,
+  sliceOfLife,
+  sports,
+  supernatural,
+  thriller,
+  none
+}

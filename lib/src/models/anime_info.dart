@@ -1,17 +1,17 @@
 import 'anime_result.dart';
 import 'anime_episode.dart';
-import '../types/sub_or_dub.dart';
+import '../types/genres.dart';
 import '../types/seasons.dart';
+import '../types/sub_or_dub.dart';
 
 class AnimeInfo extends AnimeResult {
-  String? malId;
-  List<String>? genres;
+  int? malId;
+  List<Genres>? genres;
   String? description;
   int? episodeCount;
   SubOrDub? subOrDub;
   List<String>? synonyms;
-  // 2 character representation for country of origin, e.g. JP for Japan.
-  String? originCountry;
+  String? originCountry; // 2 character repr.
   bool? isAdult;
   bool? isLicensed;
   Seasons? season;

@@ -1,1 +1,1 @@
-enum Seasons { fall, winter, spring, summer }
+enum Seasons { fall, winter, spring, summer, unknown }

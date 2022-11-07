@@ -3,7 +3,7 @@ import '../types/media_status.dart';
 import '../types/media_format.dart';
 
 class AnimeResult {
-  final String id;
+  final int id;
   final ItemTitle title;
   String? coverImage;
   String? bannerImage;

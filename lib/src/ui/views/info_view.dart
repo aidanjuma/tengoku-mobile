@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/models/anime_result.dart';
+import 'package:provider/provider.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
 
 class InfoView extends StatefulWidget {
   final AnimeResult initialData;
@@ -79,7 +81,7 @@ class _InfoViewState extends State<InfoView> {
             ),
           ),
           /* Padding, Text for Titles (Romaji | Native) */
-          Padding(
+          Container(
             padding: EdgeInsets.symmetric(
               vertical: height * 0.01,
               horizontal: width * 0.025,
@@ -147,6 +149,7 @@ class _InfoViewState extends State<InfoView> {
               ),
             ),
           ),
+          /* Description Box */
         ],
       ),
     );
@@ -178,6 +181,11 @@ class _InfoViewState extends State<InfoView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // TODO: Implement multi-provider.
+      Provider.of<ConsumetProvider>(context, listen: false)
+          .getAnimeInfoWithEpisodes(widget.initialData.id, null);
+    });
   }
 
   @override

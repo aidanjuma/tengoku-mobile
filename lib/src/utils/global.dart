@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tengoku/src/types/genres.dart';
 import 'package:tengoku/src/types/seasons.dart';
 import 'package:tengoku/src/types/sub_or_dub.dart';
 import 'package:tengoku/src/types/media_format.dart';
@@ -24,20 +25,42 @@ const Map<String, MediaFormat> mediaFormatOptions = {
   'MUSIC': MediaFormat.music,
   'MANGA': MediaFormat.manga,
   'NOVEL': MediaFormat.novel,
-  'ONE_SHOT': MediaFormat.oneShot,
+  'ONE_SHOT': MediaFormat.oneShot
 };
 
 const Map<String, SubOrDub> subOrDubOptions = {
   'sub': SubOrDub.sub,
   'dub': SubOrDub.dub,
-  'both': SubOrDub.both,
+  'both': SubOrDub.both
 };
 
 const Map<String, Seasons> seasonsOptions = {
   'SPRING': Seasons.spring,
   'SUMMER': Seasons.summer,
   'FALL': Seasons.fall,
-  'WINTER': Seasons.winter,
+  'WINTER': Seasons.winter
+};
+
+const Map<String, Genres> genresOptions = {
+  'Action': Genres.action,
+  'Adventure': Genres.adventure,
+  'Cars': Genres.cars,
+  'Comedy': Genres.comedy,
+  'Drama': Genres.drama,
+  'Ecchi': Genres.ecchi,
+  'Fantasy': Genres.fantasy,
+  'Horror': Genres.horror,
+  'Mahou Shoujo': Genres.mahouShoujo,
+  'Mecha': Genres.mecha,
+  'Music': Genres.music,
+  'Mystery': Genres.mystery,
+  'Psychological': Genres.psychological,
+  'Romance': Genres.romance,
+  'Sci-Fi': Genres.sciFi,
+  'Slice of Life': Genres.sliceOfLife,
+  'Sports': Genres.sports,
+  'Supernatural': Genres.supernatural,
+  'Thriller': Genres.thriller
 };
 
 MediaStatus evaluateMediaStatus(String? rawStatus) {
@@ -52,12 +75,17 @@ MediaFormat evaluateMediaFormat(String? rawFormat) {
 
 SubOrDub? evaluateSubOrDub(String? rawSubOrDub) {
   final SubOrDub? enumerated = subOrDubOptions[rawSubOrDub];
-  return enumerated;
+  return enumerated ?? SubOrDub.unknown;
 }
 
-Seasons? evaluateSeason(String? rawSeason) {
+Seasons evaluateSeason(String? rawSeason) {
   final Seasons? enumerated = seasonsOptions[rawSeason];
-  return enumerated;
+  return enumerated ?? Seasons.unknown;
+}
+
+Genres evaluateGenre(String? rawGenre) {
+  final Genres? enumerated = genresOptions[rawGenre];
+  return enumerated ?? Genres.none;
 }
 
 pushToInfoView(BuildContext context, AnimeResult data) {
