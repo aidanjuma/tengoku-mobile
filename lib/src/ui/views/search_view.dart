@@ -35,7 +35,6 @@ class _SearchViewState extends State<SearchView> {
             bottom: height * 0.035,
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Icon(EvaIcons.search),

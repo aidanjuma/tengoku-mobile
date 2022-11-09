@@ -24,7 +24,6 @@ class SearchResultTile extends StatelessWidget {
       child: Container(
         margin: spacing,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
@@ -46,7 +45,6 @@ class SearchResultTile extends StatelessWidget {
             const Padding(padding: EdgeInsets.symmetric(horizontal: 12)),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Row(

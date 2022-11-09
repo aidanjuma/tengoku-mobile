@@ -110,7 +110,6 @@ class _DiscoverViewState extends State<DiscoverView> {
                               SizedBox(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     const Icon(
@@ -151,7 +150,6 @@ class _DiscoverViewState extends State<DiscoverView> {
             height: height * 0.25,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(

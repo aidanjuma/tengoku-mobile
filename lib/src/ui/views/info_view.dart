@@ -20,9 +20,9 @@ class InfoView extends StatefulWidget {
 class _InfoViewState extends State<InfoView> {
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -30,6 +30,7 @@ class _InfoViewState extends State<InfoView> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.15),
         child: Container(
+          width: double.infinity,
           margin: EdgeInsets.symmetric(
             horizontal: width * 0.05,
             vertical: height * 0.05,
@@ -44,6 +45,7 @@ class _InfoViewState extends State<InfoView> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           SizedBox(
             width: double.infinity,
@@ -80,14 +82,19 @@ class _InfoViewState extends State<InfoView> {
               ],
             ),
           ),
-          /* Padding, Text for Titles (Romaji | Native) */
+          /* Padding, Text for Titles (Romaji | Native) & Play Button */
           Container(
+            width: double.infinity,
             padding: EdgeInsets.symmetric(
               vertical: height * 0.01,
               horizontal: width * 0.025,
             ),
+            /* Title(s) & Play Button Column */
             child: Column(
-              children: <Text>[
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                /* Title(s) */
                 Text(
                   widget.initialData.title.romaji ??
                       widget.initialData.title.userPreferred!,
@@ -112,44 +119,44 @@ class _InfoViewState extends State<InfoView> {
                     color: colors.onSurface,
                   ),
                 ),
+                /* Play Button */
+                BouncingWidget(
+                  scaleFactor: 0.5,
+                  duration: const Duration(milliseconds: 200),
+                  onPressed: () => {},
+                  child: Container(
+                    width: width * 0.2,
+                    height: height * 0.045,
+                    margin: EdgeInsets.only(top: height * 0.01),
+                    padding: EdgeInsets.only(
+                      left: width * 0.02,
+                      right: width * 0.03,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const <Widget>[
+                        Icon(EvaIcons.arrowRight),
+                        Text(
+                          'Play',
+                          style: TextStyle(
+                            fontFamily: 'DM Sans',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          /* Play Button */
-          BouncingWidget(
-            scaleFactor: 0.5,
-            duration: const Duration(milliseconds: 200),
-            onPressed: () => {},
-            child: Container(
-              width: width * 0.2,
-              height: height * 0.045,
-              margin: EdgeInsets.symmetric(vertical: height * 0.005),
-              padding: EdgeInsets.only(
-                left: width * 0.02,
-                right: width * 0.03,
-              ),
-              decoration: BoxDecoration(
-                color: colors.primary,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Icon(EvaIcons.arrowRight),
-                  Text(
-                    'Play',
-                    style: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          /* Description Box */
+          // TODO: Description, Relations, Genres, Episodes
         ],
       ),
     );
