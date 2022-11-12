@@ -63,6 +63,17 @@ const Map<String, Genres> genresOptions = {
   'Thriller': Genres.thriller
 };
 
+final List<MediaFormat> unsupportedFormats = [
+  MediaFormat.music,
+  MediaFormat.novel,
+  MediaFormat.unknown
+];
+
+final List<MediaStatus> unsupportedStatuses = [
+  MediaStatus.notYetAired,
+  MediaStatus.unknown
+];
+
 MediaStatus evaluateMediaStatus(String? rawStatus) {
   final MediaStatus? enumerated = mediaStatusOptions[rawStatus];
   return enumerated ?? MediaStatus.unknown;

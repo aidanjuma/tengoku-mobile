@@ -78,7 +78,7 @@ class _SearchViewState extends State<SearchView> {
                 if (result.status != MediaStatus.notYetAired) {
                   tiles.add(
                     SearchResultTile(
-                      result: animeResults[i],
+                      result: result,
                       spacing: const EdgeInsets.symmetric(vertical: 12),
                     ),
                   );

@@ -11,6 +11,7 @@ class AnimeResult {
   int? rating;
   MediaFormat? format;
   int? releaseDate;
+  String? relationType;
 
   AnimeResult({
     required this.id,
@@ -21,5 +22,6 @@ class AnimeResult {
     this.rating,
     this.format,
     this.releaseDate,
+    this.relationType,
   });
 }

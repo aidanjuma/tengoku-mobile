@@ -14,8 +14,8 @@ class ConsumetProvider extends ChangeNotifier {
   List<AnimeResult> _trendingAnime = [];
   List<AnimeResult> get trendingAnime => _trendingAnime;
 
-  late AnimeInfo _currentAnimeInfo;
-  AnimeInfo get currentAnimeInfo => _currentAnimeInfo;
+  AnimeInfo? _currentAnimeInfo;
+  AnimeInfo? get currentAnimeInfo => _currentAnimeInfo;
 
   Future<void> basicAnimeSearch(
       String query, int? page, int? resultsPerPage) async {

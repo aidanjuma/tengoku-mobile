@@ -12,7 +12,8 @@ class ContentSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
+      fit: FlexFit.loose,
       child: ListView.builder(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),

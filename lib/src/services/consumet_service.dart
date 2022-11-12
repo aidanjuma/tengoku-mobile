@@ -131,6 +131,7 @@ class ConsumetService {
         releaseDate: item['releaseDate'] is String
             ? int.parse(item['releaseDate'])
             : item['releaseDate'],
+        relationType: item['relationType'],
       );
 
       animeList.add(anime);
