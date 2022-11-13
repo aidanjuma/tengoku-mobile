@@ -4,6 +4,8 @@ import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
+import 'package:tengoku/src/ui/components/panels/cards/relation_card.dart';
+import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
 
 class InfoView extends StatefulWidget {
   final AnimeResult initialData;
@@ -86,7 +88,7 @@ class _InfoViewState extends State<InfoView> {
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              vertical: height * 0.01,
+              vertical: height * 0.005,
               horizontal: width * 0.025,
             ),
             /* Title(s) & Play Button Column */
@@ -156,7 +158,65 @@ class _InfoViewState extends State<InfoView> {
               ],
             ),
           ),
-          // TODO: Description, Relations, Genres, Episodes
+          /* Relations */
+          Consumer<ConsumetProvider>(
+            builder: ((context, provider, child) {
+              if (provider.isLoading == false &&
+                  provider.currentAnimeInfo != null) {
+                List<AnimeResult>? relations =
+                    provider.currentAnimeInfo!.relations!;
+
+                if (relations.isNotEmpty) {
+                  List<RelationCard> cards = [];
+                  // Relations present; map each relation to a RelationCard.
+                  for (int i = 0; i < relations.length; i++) {
+                    final relation = relations[i];
+                    cards.add(
+                      RelationCard(
+                        relation: relation,
+                        spacing: i < relations.length
+                            ? const EdgeInsets.only(right: 12)
+                            : const EdgeInsets.only(left: 12),
+                      ),
+                    );
+                  }
+
+                  return Container(
+                    width: double.infinity,
+                    height: height * 0.16,
+                    padding: EdgeInsets.symmetric(
+                      vertical: height * 0.005,
+                      horizontal: width * 0.035,
+                    ),
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(bottom: height * 0.01),
+                          child: Text(
+                            'Relations',
+                            style: TextStyle(
+                              fontFamily: 'Lexend',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color: colors.onSurface,
+                            ),
+                          ),
+                        ),
+                        ContentSlider(
+                          direction: Axis.horizontal,
+                          panels: cards,
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              }
+              return const SizedBox.shrink();
+            }),
+          )
         ],
       ),
     );
