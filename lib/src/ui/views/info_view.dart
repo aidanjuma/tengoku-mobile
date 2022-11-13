@@ -72,6 +72,7 @@ class _InfoViewState extends State<InfoView> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           image: DecorationImage(
+                            fit: BoxFit.cover,
                             image: NetworkImage(
                               widget.initialData.coverImage!,
                             ),

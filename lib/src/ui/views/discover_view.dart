@@ -83,6 +83,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             image: const DecorationImage(
+                              fit: BoxFit.cover,
                               image: AssetImage(
                                 'assets/images/featured/spy-x-family-part-2-cover.jpg',
                               ),
