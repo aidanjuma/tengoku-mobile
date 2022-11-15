@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tengoku/src/types/genres.dart';
 import 'package:tengoku/src/types/seasons.dart';
-import 'package:tengoku/src/types/sub_or_dub.dart';
 import 'package:tengoku/src/types/media_format.dart';
 import 'package:tengoku/src/types/media_status.dart';
 import 'package:tengoku/src/ui/views/info_view.dart';
@@ -26,12 +25,6 @@ const Map<String, MediaFormat> mediaFormatOptions = {
   'MANGA': MediaFormat.manga,
   'NOVEL': MediaFormat.novel,
   'ONE_SHOT': MediaFormat.oneShot
-};
-
-const Map<String, SubOrDub> subOrDubOptions = {
-  'sub': SubOrDub.sub,
-  'dub': SubOrDub.dub,
-  'both': SubOrDub.both
 };
 
 const Map<String, Seasons> seasonsOptions = {
@@ -82,11 +75,6 @@ MediaStatus evaluateMediaStatus(String? rawStatus) {
 MediaFormat evaluateMediaFormat(String? rawFormat) {
   final MediaFormat? enumerated = mediaFormatOptions[rawFormat];
   return enumerated ?? MediaFormat.unknown;
-}
-
-SubOrDub? evaluateSubOrDub(String? rawSubOrDub) {
-  final SubOrDub? enumerated = subOrDubOptions[rawSubOrDub];
-  return enumerated ?? SubOrDub.unknown;
 }
 
 Seasons evaluateSeason(String? rawSeason) {

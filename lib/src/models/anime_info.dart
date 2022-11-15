@@ -2,14 +2,14 @@ import 'anime_result.dart';
 import 'anime_episode.dart';
 import '../types/genres.dart';
 import '../types/seasons.dart';
-import '../types/sub_or_dub.dart';
 
 class AnimeInfo extends AnimeResult {
   int? malId;
   List<Genres>? genres;
   String? description;
   int? episodeCount;
-  SubOrDub? subOrDub;
+  bool? hasSub;
+  bool? hasDub;
   List<String>? synonyms;
   String? originCountry; // 2 character repr.
   bool? isAdult;
@@ -34,7 +34,8 @@ class AnimeInfo extends AnimeResult {
     this.genres,
     this.description,
     this.episodeCount,
-    this.subOrDub,
+    this.hasSub,
+    this.hasDub,
     this.synonyms,
     this.originCountry,
     this.isAdult,

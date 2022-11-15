@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
-import 'package:tengoku/src/types/media_status.dart';
 import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 
