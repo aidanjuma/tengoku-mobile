@@ -34,7 +34,7 @@ const Map<String, Seasons> seasonsOptions = {
   'WINTER': Seasons.winter
 };
 
-const Map<String, Genres> genresOptions = {
+const Map<String, Genres> stringToGenre = {
   'Action': Genres.action,
   'Adventure': Genres.adventure,
   'Cars': Genres.cars,
@@ -54,6 +54,29 @@ const Map<String, Genres> genresOptions = {
   'Sports': Genres.sports,
   'Supernatural': Genres.supernatural,
   'Thriller': Genres.thriller
+};
+
+const Map<Genres, String> genreToString = {
+  Genres.action: 'Action',
+  Genres.adventure: 'Adventure',
+  Genres.cars: 'Cars',
+  Genres.comedy: 'Comedy',
+  Genres.drama: 'Drama',
+  Genres.ecchi: 'Ecchi',
+  Genres.fantasy: 'Fantasy',
+  Genres.horror: 'Horror',
+  Genres.mahouShoujo: 'Mahou Shoujo',
+  Genres.mecha: 'Mecha',
+  Genres.music: 'Music',
+  Genres.mystery: 'Mystery',
+  Genres.psychological: 'Psychological',
+  Genres.romance: 'Romance',
+  Genres.sciFi: 'Sci-Fi',
+  Genres.sliceOfLife: 'Slice of Life',
+  Genres.sports: 'Sports',
+  Genres.supernatural: 'Supernatural',
+  Genres.thriller: 'Thriller',
+  Genres.none: 'None'
 };
 
 final List<MediaFormat> unsupportedFormats = [
@@ -83,7 +106,7 @@ Seasons evaluateSeason(String? rawSeason) {
 }
 
 Genres evaluateGenre(String? rawGenre) {
-  final Genres? enumerated = genresOptions[rawGenre];
+  final Genres? enumerated = stringToGenre[rawGenre];
   return enumerated ?? Genres.none;
 }
 
