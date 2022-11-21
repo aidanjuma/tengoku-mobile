@@ -9,6 +9,7 @@ import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
 import 'package:tengoku/src/ui/components/panels/pills/genres_pill.dart';
+import 'package:tengoku/src/ui/components/panels/tiles/episode_tile.dart';
 import 'package:tengoku/src/ui/components/panels/cards/relation_card.dart';
 
 class InfoView extends StatefulWidget {
@@ -233,7 +234,7 @@ class _InfoViewState extends State<InfoView> {
                         ),
                         /* Builder: Genres */
                         Container(
-                          margin: EdgeInsets.only(top: height * 0.03),
+                          margin: EdgeInsets.only(top: height * 0.02),
                           child: Builder(
                             builder: ((context) {
                               if (genres.isNotEmpty) {
@@ -257,6 +258,52 @@ class _InfoViewState extends State<InfoView> {
                                   child: ContentSlider(
                                     direction: Axis.horizontal,
                                     panels: pills,
+                                  ),
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }),
+                          ),
+                        ),
+                        /* Builder: Episodes List */
+                        Container(
+                          margin: EdgeInsets.only(top: height * 0.015),
+                          child: Builder(
+                            builder: ((context) {
+                              if (episodes.isNotEmpty) {
+                                List<EpisodeTile> tiles = [];
+                                /* Map n episode(s) to n EpisodeTile(s) */
+                                for (int i = 0; i < episodes.length; i++) {
+                                  final episode = episodes[i];
+                                  tiles.add(EpisodeTile(episode: episode));
+                                }
+                                /* Episodes List Widget */
+                                return SizedBox(
+                                  width: double.infinity,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(
+                                          bottom: height * 0.01,
+                                        ),
+                                        child: Text(
+                                          'Episodes',
+                                          style: TextStyle(
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                            color: colors.onSurface,
+                                          ),
+                                        ),
+                                      ),
+                                      ContentSlider(
+                                        direction: Axis.vertical,
+                                        panels: tiles,
+                                      ),
+                                    ],
                                   ),
                                 );
                               }
