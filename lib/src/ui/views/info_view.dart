@@ -234,7 +234,7 @@ class _InfoViewState extends State<InfoView> {
                         ),
                         /* Builder: Genres */
                         Container(
-                          margin: EdgeInsets.only(top: height * 0.02),
+                          margin: EdgeInsets.only(top: height * 0.03),
                           child: Builder(
                             builder: ((context) {
                               if (genres.isNotEmpty) {
@@ -267,7 +267,7 @@ class _InfoViewState extends State<InfoView> {
                         ),
                         /* Builder: Episodes List */
                         Container(
-                          margin: EdgeInsets.only(top: height * 0.015),
+                          margin: EdgeInsets.only(top: height * 0.02),
                           child: Builder(
                             builder: ((context) {
                               if (episodes.isNotEmpty) {

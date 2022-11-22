@@ -19,7 +19,7 @@ class SearchResultTile extends StatelessWidget {
 
     return BouncingWidget(
       scaleFactor: 0.25,
-      duration: const Duration(milliseconds: 50),
+      duration: const Duration(milliseconds: 100),
       onPressed: () => pushToInfoView(context, result),
       child: Container(
         margin: spacing,

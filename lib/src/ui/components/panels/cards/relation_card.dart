@@ -33,7 +33,7 @@ class RelationCard extends StatelessWidget {
         unsupportedStatuses.every((status) => status != relation.status)) {
       return BouncingWidget(
         scaleFactor: 0.5,
-        duration: const Duration(milliseconds: 50),
+        duration: const Duration(milliseconds: 200),
         onPressed: () => pushToInfoView(context, relation),
         child: _card(width, height, colors),
       );
@@ -107,7 +107,7 @@ class RelationCard extends StatelessWidget {
                   '${relation.format.toString().split('.').last.toUpperCase()} • ${relation.status.toString().split('.').last.toUpperCase()}',
                   style: const TextStyle(
                     fontFamily: 'DM Sans',
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: 10,
                   ),
                 ),

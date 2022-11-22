@@ -33,6 +33,7 @@ dependencies:
     sdk: flutter
 
   http: ^0.13.5
+  chewie: ^1.3.5
   provider: ^6.0.4
   bouncing_widget: ^2.0.0
   eva_icons_flutter: ^3.1.0
@@ -79,10 +80,6 @@ flutter:
           weight: 400
         - asset: assets/fonts/lexend/500.ttf
           weight: 500
-        - asset: assets/fonts/lexend/600.ttf
-          weight: 600
-        - asset: assets/fonts/lexend/700.ttf
-          weight: 700
     - family: DM Sans
       fonts:
         - asset: assets/fonts/dm-sans/400.ttf
@@ -95,6 +92,3 @@ flutter:
       fonts:
         - asset: assets/fonts/zen-maru-gothic/500.ttf
           weight: 500
-
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages

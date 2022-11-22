@@ -16,9 +16,10 @@ class ContentSlider extends StatelessWidget {
       fit: FlexFit.loose,
       child: ListView.builder(
         shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
         itemCount: panels.length,
+        padding: EdgeInsets.zero,
         scrollDirection: direction,
+        physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) {
           return panels[index];
         },
