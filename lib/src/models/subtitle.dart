@@ -3,5 +3,9 @@ class Subtitle {
   final String language;
   String? id;
 
-  Subtitle({required this.url, required this.language});
+  Subtitle({
+    required this.url,
+    required this.language,
+    this.id,
+  });
 }

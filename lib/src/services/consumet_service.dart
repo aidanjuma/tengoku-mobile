@@ -2,7 +2,11 @@ import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
+import 'package:tengoku/src/models/intro_timings.dart';
+import 'package:tengoku/src/models/subtitle.dart';
 import 'package:tengoku/src/types/genres.dart';
+import 'package:tengoku/src/models/video.dart';
+import 'package:tengoku/src/models/source.dart';
 import 'package:tengoku/src/types/item_title.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_result.dart';
@@ -95,6 +99,41 @@ class ConsumetService {
     return animeInfo;
   }
 
+  /* Get Anime's Streaming Links (https://api.consumet.org/meta/anilist/watch/{id}) */
+  Future<Source?> getStreamingLinksFromEpisodeId(String episodeId) async {
+    final Uri url = Uri.parse('$anilistUrl/watch/$episodeId');
+
+    final Map<String, dynamic> data = await _makeGetRequest(() async {
+      Response response = await _client.get(url);
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return data;
+    });
+
+    final Map<String, String>? headers = data['headers'];
+    final List<Map<String, dynamic>>? dataSources = data['sources'];
+    final List<Map<String, dynamic>>? dataSubtitles = data['subtitles'];
+
+    if (_neitherNullNorEmpty(dataSources)) {
+      List<Video> videos = _processVideos(dataSources!);
+      Source source = Source(sources: videos, headers: headers);
+
+      if (_neitherNullNorEmpty(dataSubtitles)) {
+        List<Subtitle> subtitles = _processSubtitles(dataSubtitles!);
+        source.subtitles = subtitles;
+      }
+
+      final Map<String, dynamic>? intro = data['intro'];
+      if (intro != null) {
+        source.introTimings = IntroTimings(
+          start: intro['start'],
+          end: intro['end'],
+        );
+      }
+    }
+
+    return null;
+  }
+
   // Network: Re-useable try-catch block for get requests.
   Future _makeGetRequest(Function request) async {
     try {
@@ -112,7 +151,7 @@ class ConsumetService {
     }
   }
 
-  List<AnimeResult>? _processResults(List<dynamic> results) {
+  List<AnimeResult> _processResults(List<dynamic> results) {
     List<AnimeResult> animeList = [];
     for (int i = 0; i < results.length; i++) {
       final item = results[i];
@@ -141,18 +180,7 @@ class ConsumetService {
     return animeList;
   }
 
-  List<String>? _dynamicListToStringList(List<dynamic> dynamicList) {
-    List<String>? stringList = [];
-
-    for (int i = 0; i < dynamicList.length; i++) {
-      final item = dynamicList[i];
-      item is String ? stringList.add(item) : stringList.add(item.toString());
-    }
-
-    return stringList;
-  }
-
-  List<Genres>? _processGenres(List<dynamic> genres) {
+  List<Genres> _processGenres(List<dynamic> genres) {
     List<Genres> genreList = [];
 
     for (int i = 0; i < genres.length; i++) {
@@ -163,7 +191,7 @@ class ConsumetService {
     return genreList;
   }
 
-  List<AnimeEpisode>? _processEpisodes(List<dynamic> episodes) {
+  List<AnimeEpisode> _processEpisodes(List<dynamic> episodes) {
     List<AnimeEpisode> episodeList = [];
     for (int i = 0; i < episodes.length; i++) {
       final item = episodes[i];
@@ -182,5 +210,56 @@ class ConsumetService {
     }
 
     return episodeList;
+  }
+
+  List<Video> _processVideos(List<Map<String, dynamic>> dataSources) {
+    List<Video> videos = [];
+    for (int i = 0; i < dataSources.length; i++) {
+      final video = dataSources[i];
+      videos.add(
+        Video(
+          url: video['url'],
+          quality: video['quality'],
+          isM3U8: video['isM3U8'],
+          isDASH: video['isDASH'],
+          sizeInBytes: video['size'],
+        ),
+      );
+    }
+
+    return videos;
+  }
+
+  List<Subtitle> _processSubtitles(List<Map<String, dynamic>> dataSubtitles) {
+    List<Subtitle> subtitles = [];
+    for (int i = 0; i < dataSubtitles.length; i++) {
+      final subtitle = dataSubtitles[i];
+      subtitles.add(
+        Subtitle(
+          url: subtitle['url'],
+          language: subtitle['lang'],
+          id: subtitle['id'],
+        ),
+      );
+    }
+
+    return subtitles;
+  }
+
+  List<String>? _dynamicListToStringList(List<dynamic> dynamicList) {
+    List<String>? stringList = [];
+
+    for (int i = 0; i < dynamicList.length; i++) {
+      final item = dynamicList[i];
+      item is String ? stringList.add(item) : stringList.add(item.toString());
+    }
+
+    return stringList;
+  }
+
+  bool _neitherNullNorEmpty(List? list) {
+    bool isTrue;
+    list != null && list.isNotEmpty ? isTrue = true : isTrue = false;
+    return isTrue;
   }
 }
