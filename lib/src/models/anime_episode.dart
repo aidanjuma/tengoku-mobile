@@ -1,12 +1,12 @@
 class AnimeEpisode {
   final String id;
   final int number;
-  final String? title;
-  final String? description;
-  final bool? isFiller;
-  final String? url;
-  final String? image;
-  final String? releaseDate;
+  String? title;
+  String? description;
+  bool? isFiller;
+  String? url;
+  String? image;
+  String? releaseDate;
 
   // Custom property: Store as value between 0 & 1; default is 0.
   double amountWatched;
