@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tengoku/src/ui/theme/global.dart';
 import 'package:tengoku/src/ui/views/root_view.dart';
+import 'package:tengoku/src/mixins/orientation_mixins.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 
 void main() {
@@ -9,11 +10,12 @@ void main() {
   runApp(app);
 }
 
-class Application extends StatelessWidget {
+class Application extends StatelessWidget with ForcePortraitMixin {
   const Application({super.key});
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ChangeNotifierProvider(
       create: (context) => ConsumetProvider(),
       child: MaterialApp(
