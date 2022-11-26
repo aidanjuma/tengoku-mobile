@@ -109,13 +109,14 @@ class ConsumetService {
       return data;
     });
 
-    final Map<String, String>? headers = data['headers'];
-    final List<Map<String, dynamic>>? dataSources = data['sources'];
-    final List<Map<String, dynamic>>? dataSubtitles = data['subtitles'];
+    final Map<String, String> headers =
+        Map<String, String>.from(data['headers']);
+    final List<dynamic>? dataSources = data['sources'];
+    final List<dynamic>? dataSubtitles = data['subtitles'];
 
     if (_neitherNullNorEmpty(dataSources)) {
       List<Video> videos = _processVideos(dataSources!);
-      Source source = Source(sources: videos, headers: headers);
+      Source source = Source(videos: videos, headers: headers);
 
       if (_neitherNullNorEmpty(dataSubtitles)) {
         List<Subtitle> subtitles = _processSubtitles(dataSubtitles!);
@@ -129,6 +130,8 @@ class ConsumetService {
           end: intro['end'],
         );
       }
+
+      return source;
     }
 
     return null;
@@ -212,7 +215,7 @@ class ConsumetService {
     return episodeList;
   }
 
-  List<Video> _processVideos(List<Map<String, dynamic>> dataSources) {
+  List<Video> _processVideos(List<dynamic> dataSources) {
     List<Video> videos = [];
     for (int i = 0; i < dataSources.length; i++) {
       final video = dataSources[i];
@@ -230,7 +233,7 @@ class ConsumetService {
     return videos;
   }
 
-  List<Subtitle> _processSubtitles(List<Map<String, dynamic>> dataSubtitles) {
+  List<Subtitle> _processSubtitles(List<dynamic> dataSubtitles) {
     List<Subtitle> subtitles = [];
     for (int i = 0; i < dataSubtitles.length; i++) {
       final subtitle = dataSubtitles[i];

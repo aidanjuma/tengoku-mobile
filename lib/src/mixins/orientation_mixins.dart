@@ -39,6 +39,7 @@ void _forceLandscapeMode() {
       DeviceOrientation.landscapeRight,
     ],
   );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 }
 
 void _enableRotation() {
@@ -50,4 +51,5 @@ void _enableRotation() {
       DeviceOrientation.landscapeRight,
     ],
   );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 }

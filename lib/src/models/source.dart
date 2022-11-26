@@ -3,13 +3,13 @@ import 'subtitle.dart';
 import 'intro_timings.dart';
 
 class Source {
-  final List<Video> sources;
+  final List<Video> videos;
   List<Subtitle>? subtitles;
   IntroTimings? introTimings;
   Map<String, String>? headers;
 
   Source({
-    required this.sources,
+    required this.videos,
     this.subtitles,
     this.introTimings,
     this.headers,
