@@ -85,9 +85,13 @@ class _SearchViewState extends State<SearchView> {
                 }
               }
 
-              return ContentSlider(
-                direction: Axis.vertical,
-                panels: tiles,
+              return Column(
+                children: <Widget>[
+                  ContentSlider(
+                    direction: Axis.vertical,
+                    panels: tiles,
+                  ),
+                ],
               );
             }
             return const SizedBox.shrink();

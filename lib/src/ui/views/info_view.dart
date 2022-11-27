@@ -132,6 +132,7 @@ class _InfoViewState extends State<InfoView> {
                   BouncingWidget(
                     scaleFactor: 0.5,
                     duration: const Duration(milliseconds: 200),
+                    // TODO: Push to first or nth episode (where relevant).
                     onPressed: () => {},
                     child: Container(
                       width: width * 0.2,
@@ -255,9 +256,13 @@ class _InfoViewState extends State<InfoView> {
                                 return SizedBox(
                                   width: double.infinity,
                                   height: height * 0.035,
-                                  child: ContentSlider(
-                                    direction: Axis.horizontal,
-                                    panels: pills,
+                                  child: Row(
+                                    children: <Widget>[
+                                      ContentSlider(
+                                        direction: Axis.horizontal,
+                                        panels: pills,
+                                      ),
+                                    ],
                                   ),
                                 );
                               }

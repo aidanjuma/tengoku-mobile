@@ -45,6 +45,8 @@ class ContentCard extends StatelessWidget {
           child: Text(
             result.title.userPreferred ?? result.title.romaji!,
             textAlign: TextAlign.center,
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               fontFamily: 'DM Sans',
               fontWeight: FontWeight.w700,
