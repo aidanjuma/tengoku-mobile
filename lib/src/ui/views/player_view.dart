@@ -24,7 +24,8 @@ class _PlayerViewState extends State<PlayerView>
   Widget build(BuildContext context) {
     super.build(context);
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async =>
+          Navigator.of(context).userGestureInProgress ? false : true,
       child: Consumer<ConsumetProvider>(
         builder: ((context, provider, child) {
           if (_chewieController != null) {
@@ -65,6 +66,8 @@ class _PlayerViewState extends State<PlayerView>
             videoPlayerController: _videoPlayerController!,
             aspectRatio: 16 / 9,
             fullScreenByDefault: true,
+            allowFullScreen: false,
+            allowedScreenSleep: false,
             // TODO: Error Builder, Custom Controls...
           );
         }
