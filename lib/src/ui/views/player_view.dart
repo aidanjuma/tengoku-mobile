@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
 import 'package:provider/provider.dart';
+import 'package:tengoku/src/ui/components/player/custom_player_controls.dart';
 import 'package:video_player/video_player.dart';
 import 'package:tengoku/src/models/source.dart';
 import 'package:tengoku/src/mixins/orientation_mixins.dart';
@@ -68,7 +69,11 @@ class _PlayerViewState extends State<PlayerView>
             fullScreenByDefault: true,
             allowFullScreen: false,
             allowedScreenSleep: false,
-            // TODO: Error Builder, Custom Controls...
+            customControls: CustomPlayerControls(
+              backgroundColor: Colors.transparent,
+              iconColor: Colors.white,
+            ),
+            // TODO: Error Builder...
           );
         }
       },
