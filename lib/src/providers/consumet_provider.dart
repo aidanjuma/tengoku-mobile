@@ -9,15 +9,23 @@ class ConsumetProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
+  /* Search */
+  String _latestQuery = '';
+  String get latestQuery => _latestQuery;
   List<AnimeResult> _animeResults = [];
   List<AnimeResult> get animeResults => _animeResults;
 
+  /* Discover */
   List<AnimeResult> _trendingAnime = [];
   List<AnimeResult> get trendingAnime => _trendingAnime;
+  List<AnimeResult> _popularAnime = [];
+  List<AnimeResult> get popularAnime => _popularAnime;
 
+  /* Info */
   AnimeInfo? _currentAnimeInfo;
   AnimeInfo? get currentAnimeInfo => _currentAnimeInfo;
 
+  /* Watch */
   Source? _currentAnimeSource;
   Source? get currentAnimeSource => _currentAnimeSource;
 
@@ -30,6 +38,7 @@ class ConsumetProvider extends ChangeNotifier {
         await _service.basicAnimeSearch(query, page, resultsPerPage);
 
     _animeResults = results!;
+    _latestQuery = query;
     isLoading = false;
     notifyListeners();
   }
@@ -42,6 +51,18 @@ class ConsumetProvider extends ChangeNotifier {
         await _service.getTrendingAnime(page, resultsPerPage);
 
     _trendingAnime = results!;
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> getPopularAnime(int? page, int? resultsPerPage) async {
+    isLoading = true;
+    notifyListeners();
+
+    final List<AnimeResult>? results =
+        await _service.getPopularAnime(page, resultsPerPage);
+
+    _popularAnime = results!;
     isLoading = false;
     notifyListeners();
   }

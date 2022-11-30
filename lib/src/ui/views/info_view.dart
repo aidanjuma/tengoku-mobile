@@ -95,7 +95,7 @@ class _InfoViewState extends State<InfoView> {
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                vertical: height * 0.005,
+                vertical: height * 0.0075,
                 horizontal: width * 0.025,
               ),
               /* Title(s) & Play Button Column */
@@ -172,7 +172,6 @@ class _InfoViewState extends State<InfoView> {
                     provider.currentAnimeInfo != null) {
                   AnimeInfo animeInfo = provider.currentAnimeInfo!;
 
-                  // Data to map to user interface:
                   List<AnimeResult>? relations = animeInfo.relations!;
                   List<Genres>? genres = animeInfo.genres!;
                   List<AnimeEpisode>? episodes = animeInfo.episodes!;

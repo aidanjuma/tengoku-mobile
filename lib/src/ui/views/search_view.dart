@@ -103,14 +103,13 @@ class _SearchViewState extends State<SearchView> {
 
   void _updateSearchResults(String query, int? page, int? resultsPerPage) {
     _debouncer.run(
-      () async => await Provider.of<ConsumetProvider>(
-        context,
-        listen: false,
-      ).basicAnimeSearch(
-        query,
-        page,
-        resultsPerPage,
-      ),
+      () async {
+        final provider = Provider.of<ConsumetProvider>(context, listen: false);
+        // Only fire request if query is different than last time.
+        if (provider.latestQuery != query) {
+          await provider.basicAnimeSearch(query, page, resultsPerPage);
+        }
+      },
     );
   }
 

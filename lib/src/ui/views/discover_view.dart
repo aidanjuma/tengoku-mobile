@@ -65,78 +65,84 @@ class _DiscoverViewState extends State<DiscoverView> {
                     ),
                   ),
                 ),
-                /* Container - Push content away from edges (pad out) */
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.025),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: <Widget>[
-                      /* Left: Cover Image */
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          width: 160,
-                          height: 226,
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            image: const DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(
-                                'assets/images/featured/spy-x-family-part-2-cover.jpg',
+                /* Aligned Container: Snap to Bottom of SizedBox */
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    height: 226,
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        /* Left: Cover Image */
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Container(
+                            width: 160,
+                            height: 226,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              image: const DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                  'assets/images/featured/spy-x-family-part-2-cover.jpg',
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      /* Right: Basic Info */
-                      Align(
-                        alignment: Alignment.center,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              const Text(
-                                'SPY×FAMILY Part 2',
-                                style: TextStyle(
-                                  fontFamily: 'DM Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 22,
+                        /* Right: Basic Info */
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: <Widget>[
+                                const Text(
+                                  'SPY×FAMILY Part 2',
+                                  style: TextStyle(
+                                    fontFamily: 'DM Sans',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 22,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    const Icon(
-                                      EvaIcons.star,
-                                      size: 18,
-                                      color: Color(0xfff7d16f),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: const Text(
-                                        '8.6/10',
-                                        style: TextStyle(
-                                          fontFamily: 'Lexend',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 16,
+                                SizedBox(
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      const Icon(
+                                        EvaIcons.star,
+                                        size: 18,
+                                        color: Color(0xfff7d16f),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: const Text(
+                                          '8.6/10',
+                                          style: TextStyle(
+                                            fontFamily: 'Lexend',
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

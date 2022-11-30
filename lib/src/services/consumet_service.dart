@@ -32,7 +32,7 @@ class ConsumetService {
       return data['results'];
     });
 
-    final List<AnimeResult>? animeList = _processResults(results);
+    final List<AnimeResult> animeList = _processResults(results);
 
     return animeList;
   }
@@ -49,7 +49,24 @@ class ConsumetService {
       return data['results'];
     });
 
-    final List<AnimeResult>? animeList = _processResults(results);
+    final List<AnimeResult> animeList = _processResults(results);
+
+    return animeList;
+  }
+
+  /* Get Popular Anime (https://api.consumet.org/meta/anilist/popular) */
+  Future<List<AnimeResult>?> getPopularAnime(
+      int? page, int? resultsPerPage) async {
+    final Uri url =
+        Uri.parse('$anilistUrl/popular?page=$page&perPage=$resultsPerPage');
+
+    final List<dynamic> results = await _makeGetRequest(() async {
+      Response response = await _client.get(url);
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return data['results'];
+    });
+
+    final List<AnimeResult> animeList = _processResults(results);
 
     return animeList;
   }
