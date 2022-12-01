@@ -78,7 +78,7 @@ class EpisodeTile extends StatelessWidget {
   _pushToPlayerView(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PlayerView(episodeId: episode.id),
+        builder: (context) => PlayerView(episode: episode),
       ),
     );
   }
