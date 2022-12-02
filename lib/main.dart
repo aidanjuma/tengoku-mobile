@@ -3,17 +3,19 @@ import 'package:provider/provider.dart';
 import 'package:tengoku/src/ui/theme/global.dart';
 import 'package:tengoku/src/ui/views/root_view.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
+import 'package:tengoku/src/mixins/force_portrait_mode_mixin.dart';
 
 void main() {
   const app = Application();
   runApp(app);
 }
 
-class Application extends StatelessWidget {
+class Application extends StatelessWidget with ForcePortraitModeMixin {
   const Application({super.key});
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ChangeNotifierProvider(
       create: (context) => ConsumetProvider(),
       child: MaterialApp(

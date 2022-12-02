@@ -5,7 +5,7 @@ import 'package:video_player/video_player.dart';
 import 'package:tengoku/src/models/source.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/mixins/orientation_manager_mixin.dart';
+import 'package:tengoku/src/mixins/enforce_required_orientation_mixin.dart';
 import 'package:tengoku/src/ui/components/player/custom_player_controls.dart';
 
 class PlayerView extends StatefulWidget {
@@ -17,7 +17,7 @@ class PlayerView extends StatefulWidget {
 }
 
 class _PlayerViewState extends State<PlayerView>
-    with OrientationManagerMixin<PlayerView> {
+    with EnforceRequiredOrientation<PlayerView> {
   String? src;
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
@@ -57,10 +57,11 @@ class _PlayerViewState extends State<PlayerView>
         if (provider.currentAnimeSource != null) {
           final Source source = provider.currentAnimeSource!;
           src = source.videos
-              .where((video) => video.quality == "default")
+              .where((video) => video.quality == 'default')
               .first
               .url;
-          _videoPlayerController = VideoPlayerController.network(src!);
+          _videoPlayerController =
+              VideoPlayerController.network(src!, httpHeaders: source.headers);
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             aspectRatio: 16 / 9,

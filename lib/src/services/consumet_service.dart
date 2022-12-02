@@ -126,8 +126,9 @@ class ConsumetService {
       return data;
     });
 
-    final Map<String, String> headers =
-        Map<String, String>.from(data['headers']);
+    final Map<String, String> headers = data['headers'] != null
+        ? Map<String, String>.from(data['headers'])
+        : {};
     final List<dynamic>? dataSources = data['sources'];
     final List<dynamic>? dataSubtitles = data['subtitles'];
 
