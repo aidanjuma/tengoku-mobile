@@ -29,7 +29,7 @@ class _SearchViewState extends State<SearchView> {
         preferredSize: Size.fromHeight(height * 0.2),
         child: Container(
           margin: EdgeInsets.only(
-            top: height * 0.05,
+            top: height * 0.075,
             left: width * 0.05,
             right: width * 0.05,
             bottom: height * 0.035,

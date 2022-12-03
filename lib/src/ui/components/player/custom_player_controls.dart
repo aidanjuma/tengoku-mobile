@@ -14,7 +14,6 @@ import 'package:chewie/src/notifiers/index.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 
-// TODO: Actually write custom player UI...
 class CustomPlayerControls extends StatefulWidget {
   final Color backgroundColor;
   final Color iconColor;
@@ -86,7 +85,42 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
           absorbing: playerNotifier.hideStuff,
           child: Stack(
             children: [
-              _buildSkipControlAreas(),
+              AnimatedOpacity(
+                opacity: playerNotifier.hideStuff ? 0.0 : 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.5),
+                        Colors.black.withOpacity(0.2),
+                        Colors.transparent,
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.2),
+                        Colors.black.withOpacity(0.5),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  _hideTimer?.cancel();
+                  setState(
+                    () => playerNotifier.hideStuff = !playerNotifier.hideStuff,
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.transparent,
+                  child: _buildSkipControlAreas(),
+                ),
+              ),
               AnimatedOpacity(
                 opacity: playerNotifier.hideStuff ? 0.0 : 1.0,
                 duration: const Duration(milliseconds: 300),
@@ -162,13 +196,14 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: BouncingWidget(
-              scaleFactor: 0.75,
-              duration: const Duration(milliseconds: 100),
-              onPressed: () => Navigator.pop(context),
-              child: const Icon(EvaIcons.close, size: 37.5),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              padding: const EdgeInsets.only(left: 20),
+              child: const Icon(
+                EvaIcons.close,
+                size: 37.5,
+              ),
             ),
           ),
         ],
@@ -326,7 +361,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
         child: Container(
           width: double.infinity,
           alignment: Alignment.bottomCenter,
-          margin: const EdgeInsets.symmetric(vertical: 12),
+          margin: const EdgeInsets.symmetric(vertical: 32),
           child: Column(children: <Widget>[
             Row(
               // TODO: Additional Icons + Functionality...
