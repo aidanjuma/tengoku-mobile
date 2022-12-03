@@ -29,38 +29,42 @@ class _SearchViewState extends State<SearchView> {
         preferredSize: Size.fromHeight(height * 0.2),
         child: Container(
           margin: EdgeInsets.only(
-            top: height * 0.1,
+            top: height * 0.05,
             left: width * 0.05,
             right: width * 0.05,
             bottom: height * 0.035,
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const Icon(EvaIcons.search),
-              const Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                ),
-              ),
-              Flexible(
-                child: TextField(
-                  decoration: const InputDecoration.collapsed(
-                    hintText: 'Search',
-                    border: InputBorder.none,
-                    hintStyle: TextStyle(
-                      fontFamily: 'DM Sans',
-                      fontWeight: FontWeight.w500,
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Icon(EvaIcons.search),
+                const Padding(padding: EdgeInsets.symmetric(horizontal: 12)),
+                Flexible(
+                  child: TextField(
+                    decoration: const InputDecoration.collapsed(
+                      hintText: 'Search',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(
+                        fontFamily: 'DM Sans',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onChanged: (query) => _updateSearchResults(
+                      query,
+                      null,
+                      null,
                     ),
                   ),
-                  onChanged: (query) => _updateSearchResults(
-                    query,
-                    null,
-                    null,
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

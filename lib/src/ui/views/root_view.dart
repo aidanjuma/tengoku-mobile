@@ -19,21 +19,23 @@ class _RootViewState extends State<RootView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: nav.NavigationBar(
-        height: 100,
-        iconSize: 28,
-        items: <nav.NavigationBarItem>[
-          nav.NavigationBarItem(icon: EvaIcons.bulbOutline),
-          nav.NavigationBarItem(icon: EvaIcons.searchOutline),
-          nav.NavigationBarItem(icon: EvaIcons.listOutline),
-        ],
-        onChanged: (int index) {
-          _currentIndex = index;
-          setState(() => {});
-        },
+    return SafeArea(
+      child: Scaffold(
+        bottomNavigationBar: nav.NavigationBar(
+          height: 100,
+          iconSize: 28,
+          items: <nav.NavigationBarItem>[
+            nav.NavigationBarItem(icon: EvaIcons.bulbOutline),
+            nav.NavigationBarItem(icon: EvaIcons.searchOutline),
+            nav.NavigationBarItem(icon: EvaIcons.listOutline),
+          ],
+          onChanged: (int index) {
+            _currentIndex = index;
+            setState(() => {});
+          },
+        ),
+        body: _pages[_currentIndex],
       ),
-      body: _pages[_currentIndex],
     );
   }
 

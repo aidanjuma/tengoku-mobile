@@ -27,7 +27,7 @@ class _DiscoverViewState extends State<DiscoverView> {
         child: Container(
           margin: EdgeInsets.symmetric(
             horizontal: width * 0.05,
-            vertical: height * 0.05,
+            vertical: height * 0.025,
           ),
           child: const Align(
             alignment: Alignment.centerLeft,

@@ -3,16 +3,13 @@ import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:chewie/src/animated_play_pause.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:chewie/src/chewie_player.dart';
-import 'package:chewie/src/cupertino/widgets/cupertino_options_dialog.dart';
 import 'package:chewie/src/helpers/utils.dart';
-import 'package:chewie/src/models/option_item.dart';
 import 'package:chewie/src/notifiers/index.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
@@ -89,13 +86,14 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
           absorbing: playerNotifier.hideStuff,
           child: Stack(
             children: [
+              _buildSkipControlAreas(),
               AnimatedOpacity(
                 opacity: playerNotifier.hideStuff ? 0.0 : 1.0,
                 duration: const Duration(milliseconds: 300),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _buildTopBar(
+                    _buildInfoBar(
                       backgroundColor,
                       iconColor,
                       barHeight,
@@ -105,7 +103,21 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
                     _buildBottomBar(backgroundColor, iconColor, barHeight),
                   ],
                 ),
-              )
+              ),
+              AnimatedOpacity(
+                opacity: playerNotifier.hideStuff ? 0.0 : 1.0,
+                duration: const Duration(milliseconds: 300),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _buildSkipBackButton(),
+                      _buildPlayPauseToggle(),
+                      _buildSkipForwardButton(),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -114,7 +126,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
   }
 
   /* Widgets */
-  Widget _buildTopBar(Color backgroundColor, Color iconColor, double barHeight,
+  Widget _buildInfoBar(Color backgroundColor, Color iconColor, double barHeight,
       double buttonPadding) {
     return Container(
       height: 85,
@@ -129,8 +141,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  widget.animeInfo.title.romaji ??
-                      widget.animeInfo.title.userPreferred!,
+                  '${widget.animeInfo.title.romaji ?? widget.animeInfo.title.userPreferred!} • EP${widget.episode.number}',
                   style: const TextStyle(
                     fontFamily: 'DM Sans',
                     fontWeight: FontWeight.w700,
@@ -161,6 +172,57 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSkipBackButton() {
+    return BouncingWidget(
+      scaleFactor: 0.75,
+      duration: const Duration(milliseconds: 100),
+      onPressed: _skipBack,
+      child: Container(
+        height: 48,
+        color: Colors.transparent,
+        child: Icon(
+          FontAwesomeIcons.rotateLeft,
+          color: widget.iconColor.withOpacity(0.85),
+          size: 36,
+        ),
+      ),
+    );
+  }
+
+  GestureDetector _buildPlayPauseToggle() {
+    return GestureDetector(
+      onTap: _playPause,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 64),
+        color: Colors.transparent,
+        child: Icon(
+          chewieController.isPlaying
+              ? FontAwesomeIcons.pause
+              : FontAwesomeIcons.play,
+          color: widget.iconColor,
+          size: 48,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSkipForwardButton() {
+    return BouncingWidget(
+      scaleFactor: 0.75,
+      duration: const Duration(milliseconds: 100),
+      onPressed: _skipForward,
+      child: Container(
+        height: 48,
+        color: Colors.transparent,
+        child: Icon(
+          FontAwesomeIcons.rotateRight,
+          color: widget.iconColor.withOpacity(0.85),
+          size: 36,
+        ),
       ),
     );
   }
@@ -197,7 +259,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
               ),
             );
           },
-          child: Container(
+          child: SizedBox(
             width: maxWidth,
             height: 20,
             child: Stack(
@@ -205,7 +267,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 150),
                   width: maxWidth,
-                  height: _dragging ? 12 : 6,
+                  height: _dragging ? 16 : 10,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.white.withOpacity(0.6),
@@ -216,7 +278,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
                   width: position.inSeconds.isNaN || position.inSeconds <= 0
                       ? 0
                       : progressAsWidth,
-                  height: _dragging ? 12 : 6,
+                  height: _dragging ? 16 : 10,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
                     color: Colors.white,
@@ -278,114 +340,27 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     );
   }
 
-  GestureDetector _buildOptionsButton(
-    Color iconColor,
-    double barHeight,
-  ) {
-    final options = <OptionItem>[];
-
-    if (chewieController.additionalOptions != null &&
-        chewieController.additionalOptions!(context).isNotEmpty) {
-      options.addAll(chewieController.additionalOptions!(context));
-    }
-
-    return GestureDetector(
-      onTap: () async {
-        _hideTimer?.cancel();
-
-        if (chewieController.optionsBuilder != null) {
-          await chewieController.optionsBuilder!(context, options);
-        } else {
-          await showCupertinoModalPopup<OptionItem>(
-            context: context,
-            semanticsDismissible: true,
-            useRootNavigator: chewieController.useRootNavigator,
-            builder: (context) => CupertinoOptionsDialog(
-              options: options,
-              cancelButtonText:
-                  chewieController.optionsTranslation?.cancelButtonText,
-            ),
-          );
-          if (_latestValue.isPlaying) {
-            _startHideTimer();
-          }
-        }
-      },
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: const EdgeInsets.only(left: 4.0, right: 8.0),
-        margin: const EdgeInsets.only(right: 6.0),
-        child: Icon(
-          Icons.more_vert,
-          color: iconColor,
-          size: 18,
+  Row _buildSkipControlAreas() {
+    final halfWidth = MediaQuery.of(context).size.width * 0.5;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <GestureDetector>[
+        GestureDetector(
+          onDoubleTap: _skipBack,
+          child: Container(
+            width: halfWidth,
+            color: Colors.transparent,
+          ),
         ),
-      ),
-    );
-  }
-
-  GestureDetector _buildPlayPause(
-    VideoPlayerController controller,
-    Color iconColor,
-    double barHeight,
-  ) {
-    return GestureDetector(
-      onTap: _playPause,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
+        GestureDetector(
+          onDoubleTap: _skipForward,
+          child: Container(
+            width: halfWidth,
+            color: Colors.transparent,
+          ),
         ),
-        child: AnimatedPlayPause(
-          color: widget.iconColor,
-          playing: controller.value.isPlaying,
-        ),
-      ),
-    );
-  }
-
-  GestureDetector _buildSkipForward(Color iconColor, double barHeight) {
-    return GestureDetector(
-      onTap: _skipForward,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 8.0,
-        ),
-        margin: const EdgeInsets.only(
-          right: 8.0,
-        ),
-        child: Icon(
-          CupertinoIcons.goforward_15,
-          color: iconColor,
-          size: 18.0,
-        ),
-      ),
-    );
-  }
-
-  GestureDetector _buildSkipBack(Color iconColor, double barHeight) {
-    return GestureDetector(
-      onTap: _skipBack,
-      child: Container(
-        height: barHeight,
-        color: Colors.transparent,
-        margin: const EdgeInsets.only(left: 10.0),
-        padding: const EdgeInsets.only(
-          left: 6.0,
-          right: 6.0,
-        ),
-        child: Icon(
-          CupertinoIcons.gobackward_15,
-          color: iconColor,
-          size: 18.0,
-        ),
-      ),
+      ],
     );
   }
 
@@ -435,7 +410,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     _cancelAndRestartTimer();
     final beginning = Duration.zero.inMilliseconds;
     final skip =
-        (_latestValue.position - const Duration(seconds: 15)).inMilliseconds;
+        (_latestValue.position - const Duration(seconds: 10)).inMilliseconds;
     controller.seekTo(Duration(milliseconds: math.max(skip, beginning)));
   }
 
@@ -443,7 +418,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     _cancelAndRestartTimer();
     final end = _latestValue.duration.inMilliseconds;
     final skip =
-        (_latestValue.position + const Duration(seconds: 15)).inMilliseconds;
+        (_latestValue.position + const Duration(seconds: 10)).inMilliseconds;
     controller.seekTo(Duration(milliseconds: math.min(skip, end)));
   }
 
