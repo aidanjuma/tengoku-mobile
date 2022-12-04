@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tengoku/src/ui/theme/global.dart';
 import 'package:tengoku/src/ui/views/root_view.dart';
+import 'package:tengoku/src/providers/isar_provider.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/mixins/force_portrait_mode_mixin.dart';
 
@@ -16,8 +17,11 @@ class Application extends StatelessWidget with ForcePortraitModeMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ChangeNotifierProvider(
-      create: (context) => ConsumetProvider(),
+    return MultiProvider(
+      providers: [
+        Provider<IsarProvider>(create: (_) => IsarProvider()),
+        Provider<ConsumetProvider>(create: (_) => ConsumetProvider()),
+      ],
       child: MaterialApp(
         theme: Themes.light,
         darkTheme: Themes.dark,

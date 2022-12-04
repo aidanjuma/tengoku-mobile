@@ -31,63 +31,58 @@ class ConsumetProvider extends ChangeNotifier {
 
   Future<void> basicAnimeSearch(
       String query, int? page, int? resultsPerPage) async {
-    isLoading = true;
-    notifyListeners();
+    _setLoading(true);
 
     final List<AnimeResult>? results =
         await _service.basicAnimeSearch(query, page, resultsPerPage);
 
     _animeResults = results!;
     _latestQuery = query;
-    isLoading = false;
-    notifyListeners();
+    _setLoading(false);
   }
 
   Future<void> getTrendingAnime(int? page, int? resultsPerPage) async {
-    isLoading = true;
-    notifyListeners();
+    _setLoading(true);
 
     final List<AnimeResult>? results =
         await _service.getTrendingAnime(page, resultsPerPage);
 
     _trendingAnime = results!;
-    isLoading = false;
-    notifyListeners();
+    _setLoading(false);
   }
 
   Future<void> getPopularAnime(int? page, int? resultsPerPage) async {
-    isLoading = true;
-    notifyListeners();
+    _setLoading(true);
 
     final List<AnimeResult>? results =
         await _service.getPopularAnime(page, resultsPerPage);
 
     _popularAnime = results!;
-    isLoading = false;
-    notifyListeners();
+    _setLoading(false);
   }
 
   Future<void> getAnimeInfoWithEpisodes(int id, String? provider) async {
-    isLoading = true;
-    notifyListeners();
+    _setLoading(true);
 
     final AnimeInfo animeInfo =
         await _service.getAnimeInfoWithEpisodes(id, provider);
 
     _currentAnimeInfo = animeInfo;
-    isLoading = false;
-    notifyListeners();
+    _setLoading(false);
   }
 
   Future<void> getStreamingLinksFromEpisodeId(String episodeId) async {
-    isLoading = true;
-    notifyListeners();
+    _setLoading(true);
 
     final Source? animeSource =
         await _service.getStreamingLinksFromEpisodeId(episodeId);
 
     _currentAnimeSource = animeSource;
-    isLoading = false;
+    _setLoading(false);
+  }
+
+  void _setLoading(bool value) {
+    isLoading = value;
     notifyListeners();
   }
 }
