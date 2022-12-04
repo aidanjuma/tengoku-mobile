@@ -59,7 +59,7 @@ class _RootViewState extends State<RootView> {
 
     try {
       _navigationMode = await AndroidNavigationMode.getNavigationMode;
-    } on PlatformException {
+    } catch (_) {
       _navigationMode = DeviceNavigationMode.none;
     }
 

@@ -13,6 +13,7 @@ import 'package:chewie/src/helpers/utils.dart';
 import 'package:chewie/src/notifiers/index.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
+import 'package:tengoku/src/providers/isar_provider.dart';
 
 class CustomPlayerControls extends StatefulWidget {
   final Color backgroundColor;
@@ -36,6 +37,8 @@ class CustomPlayerControls extends StatefulWidget {
 
 class _CustomPlayerControlsState extends State<CustomPlayerControls>
     with SingleTickerProviderStateMixin {
+  late IsarProvider isarProvider;
+
   late PlayerNotifier playerNotifier;
   late VideoPlayerValue _latestValue;
   double? _latestVolume;
@@ -197,7 +200,10 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
             ),
           ),
           GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () {
+              _updateEpisodeProgress();
+              Navigator.pop(context);
+            },
             child: Container(
               padding: const EdgeInsets.only(left: 20),
               child: const Icon(
@@ -399,7 +405,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     );
   }
 
-  /* Utilities */
+  /* Video Player Control Utilities */
   void _subtitleToggle() {
     setState(() {
       _subtitleOn = !_subtitleOn;
@@ -424,6 +430,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
         playerNotifier.hideStuff = false;
         _hideTimer?.cancel();
         controller.pause();
+        _updateEpisodeProgress();
       } else {
         _cancelAndRestartTimer();
 
@@ -472,6 +479,27 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     _displayBufferingIndicator = true;
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  double? _evaluateWatchProgress() {
+    final position = _latestValue.position.inSeconds;
+    final duration = _latestValue.duration.inSeconds;
+
+    final double? progress =
+        position.isNaN || duration.isNaN ? null : (position / duration);
+
+    return progress;
+  }
+
+  Future<void> _updateEpisodeProgress() async {
+    final double? progress = _evaluateWatchProgress();
+
+    if (progress != null) {
+      await isarProvider.updateEpisodeProgress(
+        widget.episode,
+        progress,
+      );
     }
   }
 
@@ -524,6 +552,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
   void initState() {
     super.initState();
     playerNotifier = Provider.of<PlayerNotifier>(context, listen: false);
+    isarProvider = Provider.of<IsarProvider>(context, listen: false);
   }
 
   void _dispose() {

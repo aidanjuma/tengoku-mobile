@@ -19,8 +19,12 @@ class Application extends StatelessWidget with ForcePortraitModeMixin {
     super.build(context);
     return MultiProvider(
       providers: [
-        Provider<IsarProvider>(create: (_) => IsarProvider()),
-        Provider<ConsumetProvider>(create: (_) => ConsumetProvider()),
+        ChangeNotifierProvider<IsarProvider>(
+          create: (_) => IsarProvider(),
+        ),
+        ChangeNotifierProvider<ConsumetProvider>(
+          create: (_) => ConsumetProvider(),
+        ),
       ],
       child: MaterialApp(
         theme: Themes.light,
