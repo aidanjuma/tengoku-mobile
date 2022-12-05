@@ -1,9 +1,15 @@
+import 'package:isar/isar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/services/isar_service.dart';
 
 class IsarProvider extends ChangeNotifier {
-  final IsarService _service = IsarService();
+  final Isar isar;
+  late IsarService _service;
+
+  IsarProvider(this.isar) {
+    _service = IsarService(isar: isar);
+  }
 
   bool isLoading = false;
 

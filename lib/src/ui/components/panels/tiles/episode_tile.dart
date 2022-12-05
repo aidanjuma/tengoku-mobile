@@ -19,13 +19,8 @@ class EpisodeTile extends StatelessWidget {
         return BouncingWidget(
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 200),
-          onPressed: () async {
-            await isarProvider.returnEpisodeIfStored(episode);
-
-            if (isarProvider.currentlyWatching == null) {
-              isarProvider.startWatchingEpisode(episode);
-            }
-
+          onPressed: () {
+            _startWatchingEpisode(isarProvider);
             _pushToPlayerView(context);
           },
           child: Container(
@@ -87,6 +82,13 @@ class EpisodeTile extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _startWatchingEpisode(IsarProvider isarProvider) async {
+    await isarProvider.returnEpisodeIfStored(episode);
+    if (isarProvider.currentlyWatching == null) {
+      isarProvider.startWatchingEpisode(episode);
+    }
   }
 
   _pushToPlayerView(BuildContext context) {
