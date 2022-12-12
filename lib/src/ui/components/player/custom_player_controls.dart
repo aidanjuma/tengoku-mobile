@@ -57,6 +57,9 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
   ChewieController get chewieController => _chewieController!;
   ChewieController? _chewieController;
 
+  // Periodically save watch progress.
+  Timer? _updateProgressTimer;
+
   @override
   Widget build(BuildContext context) {
     if (_latestValue.hasError) {
@@ -450,6 +453,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
 
   void _skipBack() {
     _cancelAndRestartTimer();
+    _updateEpisodeProgress();
     final beginning = Duration.zero.inMilliseconds;
     final skip =
         (_latestValue.position - const Duration(seconds: 10)).inMilliseconds;
@@ -458,6 +462,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
 
   void _skipForward() {
     _cancelAndRestartTimer();
+    _updateEpisodeProgress();
     final end = _latestValue.duration.inMilliseconds;
     final skip =
         (_latestValue.position + const Duration(seconds: 10)).inMilliseconds;
@@ -546,6 +551,12 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
         });
       });
     }
+
+    _updateProgressTimer = Timer.periodic(
+      const Duration(milliseconds: 20000),
+      // Update only when playing...
+      (timer) => controller.value.isPlaying ? _updateEpisodeProgress() : null,
+    );
   }
 
   @override
@@ -560,6 +571,7 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
     _hideTimer?.cancel();
     _expandCollapseTimer?.cancel();
     _initTimer?.cancel();
+    _updateProgressTimer?.cancel();
   }
 
   @override
