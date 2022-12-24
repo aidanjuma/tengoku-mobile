@@ -13,9 +13,12 @@ class IsarProvider extends ChangeNotifier {
 
   bool isLoading = false;
 
-  /* For use at Episode Watch-Time (EWT) */
-  AnimeEpisode? _currentlyWatching;
-  AnimeEpisode? get currentlyWatching => _currentlyWatching;
+  AnimeEpisode? _currentEpisode;
+  AnimeEpisode? get currentEpisode => _currentEpisode;
+
+  /* List of episodes that user is currently watching. */
+  List<AnimeEpisode>? _currentlyWatching;
+  List<AnimeEpisode>? get currentlyWatching => _currentlyWatching;
 
   Future<void> returnEpisodeIfStored(AnimeEpisode episode) async {
     _setLoading(true);
@@ -23,7 +26,7 @@ class IsarProvider extends ChangeNotifier {
     final AnimeEpisode? storedEpisode =
         await _service.returnEpisodeIfStored(episode.id);
 
-    _currentlyWatching = storedEpisode;
+    _currentEpisode = storedEpisode;
     _setLoading(false);
   }
 
@@ -43,6 +46,15 @@ class IsarProvider extends ChangeNotifier {
   Future<void> deleteAllEpisodes() async {
     _setLoading(true);
     await _service.deleteAllEpisodes();
+    _setLoading(false);
+  }
+
+  Future<void> getListOfCurrentlyWatching() async {
+    _setLoading(true);
+    final List<AnimeEpisode> currentlyWatching =
+        await _service.getListOfCurrentlyWatching();
+
+    _currentlyWatching = currentlyWatching;
     _setLoading(false);
   }
 

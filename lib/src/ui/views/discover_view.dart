@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/providers/isar_provider.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
+import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 
 class DiscoverView extends StatefulWidget {
   const DiscoverView({super.key});
@@ -206,9 +207,15 @@ class _DiscoverViewState extends State<DiscoverView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<ConsumetProvider>(context, listen: false)
-          .getTrendingAnime(null, null);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      ConsumetProvider consumet =
+          Provider.of<ConsumetProvider>(context, listen: false);
+      IsarProvider isar = Provider.of<IsarProvider>(context, listen: false);
+
+      // Get Trending Anime from Consumet with default config:
+      await isar.getListOfCurrentlyWatching();
+      // Get Trending Anime from Consumet with default config:
+      await consumet.getTrendingAnime(null, null);
     });
   }
 

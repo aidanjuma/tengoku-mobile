@@ -57,4 +57,9 @@ class IsarService {
       await isar.animeEpisodes.filter().idIsNotEmpty().deleteAll();
     });
   }
+
+  /* Finds and returns a list of all anime with the 'isWatching' flag equal to true. */
+  Future<List<AnimeEpisode>> getListOfCurrentlyWatching() async {
+    return await isar.animeEpisodes.filter().isWatchingEqualTo(true).findAll();
+  }
 }

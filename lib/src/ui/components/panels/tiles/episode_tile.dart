@@ -86,7 +86,7 @@ class EpisodeTile extends StatelessWidget {
 
   Future<void> _startWatchingEpisode(IsarProvider isarProvider) async {
     await isarProvider.returnEpisodeIfStored(episode);
-    if (isarProvider.currentlyWatching == null) {
+    if (isarProvider.currentEpisode == null) {
       isarProvider.startWatchingEpisode(episode);
     }
   }
