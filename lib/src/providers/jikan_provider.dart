@@ -6,6 +6,7 @@ import 'package:tengoku/src/services/jikan_service.dart';
 class JikanProvider extends ChangeNotifier {
   final JikanService _service = JikanService();
 
+  bool isInitialized = false;
   bool isLoading = false;
 
   /* Upcoming */
@@ -22,6 +23,7 @@ class JikanProvider extends ChangeNotifier {
 
   void _setLoading(bool value) {
     isLoading = value;
+    value == true && isInitialized == false ? isInitialized = true : null;
     notifyListeners();
   }
 }

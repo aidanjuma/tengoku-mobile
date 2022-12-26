@@ -5,6 +5,7 @@ import 'package:tengoku/src/types/media_format.dart';
 import 'package:tengoku/src/types/media_status.dart';
 import 'package:tengoku/src/ui/views/info_view.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 
 const Map<String, MediaStatus> mediaStatusOptions = {
   'Ongoing': MediaStatus.ongoing,
@@ -108,6 +109,21 @@ Seasons evaluateSeason(String? rawSeason) {
 Genres evaluateGenre(String? rawGenre) {
   final Genres? enumerated = stringToGenre[rawGenre];
   return enumerated ?? Genres.none;
+}
+
+List<ContentCard> createContentCardWidgetList(List<AnimeResult> data) {
+  List<ContentCard> cards = [];
+  for (int i = 0; i < data.length; i++) {
+    cards.add(
+      ContentCard(
+        result: data[i],
+        spacing: i < data.length
+            ? const EdgeInsets.only(right: 12)
+            : const EdgeInsets.only(left: 12),
+      ),
+    );
+  }
+  return cards;
 }
 
 pushToInfoView(BuildContext context, AnimeResult data) {

@@ -11,14 +11,15 @@ class IsarProvider extends ChangeNotifier {
     _service = IsarService(isar: isar);
   }
 
+  bool isInitialized = false;
   bool isLoading = false;
 
   AnimeEpisode? _currentEpisode;
   AnimeEpisode? get currentEpisode => _currentEpisode;
 
   /* List of episodes that user is currently watching. */
-  List<AnimeEpisode>? _currentlyWatching;
-  List<AnimeEpisode>? get currentlyWatching => _currentlyWatching;
+  List<AnimeEpisode> _currentlyWatching = [];
+  List<AnimeEpisode> get currentlyWatching => _currentlyWatching;
 
   Future<void> returnEpisodeIfStored(AnimeEpisode episode) async {
     _setLoading(true);
@@ -60,6 +61,7 @@ class IsarProvider extends ChangeNotifier {
 
   void _setLoading(bool value) {
     isLoading = value;
+    value == true && isInitialized == false ? isInitialized = true : null;
     notifyListeners();
   }
 }

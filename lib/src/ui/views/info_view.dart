@@ -166,124 +166,50 @@ class _InfoViewState extends State<InfoView> {
                 ],
               ),
             ),
-            Consumer<ConsumetProvider>(
-              builder: ((context, provider, child) {
-                if (provider.isLoading == false &&
-                    provider.currentAnimeInfo != null) {
-                  AnimeInfo animeInfo = provider.currentAnimeInfo!;
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.035),
+              child: Consumer<ConsumetProvider>(
+                builder: (context, provider, child) {
+                  // Condition for Rendering:
+                  bool consumetIsReady = provider.isInitialized &&
+                      provider.isLoading == false &&
+                      provider.currentAnimeInfo != null;
 
-                  List<AnimeResult>? relations = animeInfo.relations!;
-                  List<Genres>? genres = animeInfo.genres!;
-                  List<AnimeEpisode>? episodes = animeInfo.episodes!;
+                  if (consumetIsReady) {
+                    AnimeInfo animeInfo = provider.currentAnimeInfo!;
 
-                  /* Relations, Genres & Episodes List */
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: width * 0.035),
-                    child: Column(
+                    // Various Data Sources:
+                    List<AnimeResult>? relations = animeInfo.relations!;
+                    List<Genres>? genres = animeInfo.genres!;
+                    List<AnimeEpisode>? episodes = animeInfo.episodes!;
+
+                    /* Relations, Genres & Episodes List */
+                    return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         /* Builder: Relations */
-                        Builder(
-                          builder: ((context) {
-                            if (relations.isNotEmpty) {
-                              List<RelationCard> cards = [];
-                              /* Map n relation(s) to n RelationCard(s) */
-                              for (int i = 0; i < relations.length; i++) {
-                                final relation = relations[i];
-                                cards.add(
-                                  RelationCard(
-                                    relation: relation,
-                                    spacing: i < relations.length
-                                        ? const EdgeInsets.only(right: 12)
-                                        : const EdgeInsets.only(left: 12),
-                                  ),
-                                );
-                              }
-                              /* Relations Widget */
-                              return SizedBox(
-                                width: double.infinity,
-                                height: height * 0.16,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(
-                                        bottom: height * 0.01,
-                                      ),
-                                      child: Text(
-                                        'Relations',
-                                        style: TextStyle(
-                                          fontFamily: 'Lexend',
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                          color: colors.onSurface,
-                                        ),
-                                      ),
-                                    ),
-                                    ContentSlider(
-                                      direction: Axis.horizontal,
-                                      panels: cards,
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          }),
-                        ),
-                        /* Builder: Genres */
                         Container(
-                          margin: EdgeInsets.only(top: height * 0.03),
+                          margin: EdgeInsets.only(bottom: height * 0.015),
                           child: Builder(
-                            builder: ((context) {
-                              if (genres.isNotEmpty) {
-                                List<GenresPill> pills = [];
-                                /* Map n genre(s) to n GenresPill(s) */
-                                for (int i = 0; i < genres.length; i++) {
-                                  final genre = genres[i];
-                                  pills.add(
-                                    GenresPill(
-                                      genre: genre,
-                                      spacing: i < genres.length
-                                          ? const EdgeInsets.only(right: 8)
-                                          : const EdgeInsets.only(left: 8),
+                            builder: (context) {
+                              if (relations.isNotEmpty) {
+                                List<RelationCard> cards = [];
+                                /* Map n relation(s) to n RelationCard(s) */
+                                for (int i = 0; i < relations.length; i++) {
+                                  final relation = relations[i];
+                                  cards.add(
+                                    RelationCard(
+                                      relation: relation,
+                                      spacing: i < relations.length
+                                          ? const EdgeInsets.only(right: 12)
+                                          : const EdgeInsets.only(left: 12),
                                     ),
                                   );
                                 }
-                                /* Genres Widget */
+                                /* Relations Widget */
                                 return SizedBox(
                                   width: double.infinity,
-                                  height: height * 0.035,
-                                  child: Row(
-                                    children: <Widget>[
-                                      ContentSlider(
-                                        direction: Axis.horizontal,
-                                        panels: pills,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                              return const SizedBox.shrink();
-                            }),
-                          ),
-                        ),
-                        /* Builder: Episodes List */
-                        Container(
-                          margin: EdgeInsets.only(top: height * 0.02),
-                          child: Builder(
-                            builder: ((context) {
-                              if (episodes.isNotEmpty) {
-                                List<EpisodeTile> tiles = [];
-                                /* Map n episode(s) to n EpisodeTile(s) */
-                                for (int i = 0; i < episodes.length; i++) {
-                                  final episode = episodes[i];
-                                  tiles.add(EpisodeTile(episode: episode));
-                                }
-                                /* Episodes List Widget */
-                                return SizedBox(
-                                  width: double.infinity,
+                                  height: height * 0.16,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment:
@@ -294,7 +220,7 @@ class _InfoViewState extends State<InfoView> {
                                           bottom: height * 0.01,
                                         ),
                                         child: Text(
-                                          'Episodes',
+                                          'Relations',
                                           style: TextStyle(
                                             fontFamily: 'Lexend',
                                             fontWeight: FontWeight.w500,
@@ -304,24 +230,99 @@ class _InfoViewState extends State<InfoView> {
                                         ),
                                       ),
                                       ContentSlider(
-                                        direction: Axis.vertical,
-                                        panels: tiles,
+                                        direction: Axis.horizontal,
+                                        panels: cards,
                                       ),
                                     ],
                                   ),
                                 );
                               }
                               return const SizedBox.shrink();
-                            }),
+                            },
                           ),
                         ),
+                        /* Builder: Genres */
+                        Builder(builder: (context) {
+                          if (genres.isNotEmpty) {
+                            List<GenresPill> pills = [];
+                            /* Map n genre(s) to n GenresPill(s) */
+                            for (int i = 0; i < genres.length; i++) {
+                              final genre = genres[i];
+                              pills.add(
+                                GenresPill(
+                                  genre: genre,
+                                  spacing: i < genres.length
+                                      ? const EdgeInsets.only(right: 8)
+                                      : const EdgeInsets.only(left: 8),
+                                ),
+                              );
+                            }
+                            /* Genres Widget */
+                            return SizedBox(
+                              width: double.infinity,
+                              height: height * 0.035,
+                              child: Row(
+                                children: <Widget>[
+                                  ContentSlider(
+                                    direction: Axis.horizontal,
+                                    panels: pills,
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        }),
+                        /* Builder: Episodes List */
+                        Container(
+                          margin: EdgeInsets.only(top: height * 0.02),
+                          child: Builder(builder: (context) {
+                            if (episodes.isNotEmpty) {
+                              List<EpisodeTile> tiles = [];
+                              /* Map n episode(s) to n EpisodeTile(s) */
+                              for (int i = 0; i < episodes.length; i++) {
+                                final episode = episodes[i];
+                                tiles.add(EpisodeTile(episode: episode));
+                              }
+                              /* Episodes List Widget */
+                              return SizedBox(
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(
+                                        bottom: height * 0.01,
+                                      ),
+                                      child: Text(
+                                        'Episodes',
+                                        style: TextStyle(
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: colors.onSurface,
+                                        ),
+                                      ),
+                                    ),
+                                    ContentSlider(
+                                      direction: Axis.vertical,
+                                      panels: tiles,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return const SizedBox.shrink();
+                          }),
+                        ),
                       ],
-                    ),
-                  );
-                }
-                return const SizedBox.shrink();
-              }),
-            )
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
           ],
         ),
       ),

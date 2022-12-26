@@ -7,6 +7,7 @@ import 'package:tengoku/src/services/consumet_service.dart';
 class ConsumetProvider extends ChangeNotifier {
   final ConsumetService _service = ConsumetService();
 
+  bool isInitialized = false;
   bool isLoading = false;
 
   /* Search */
@@ -83,6 +84,7 @@ class ConsumetProvider extends ChangeNotifier {
 
   void _setLoading(bool value) {
     isLoading = value;
+    value == true && isInitialized == false ? isInitialized = true : null;
     notifyListeners();
   }
 }
