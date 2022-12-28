@@ -9,6 +9,11 @@ mixin EnforceRequiredOrientation<T extends StatefulWidget> on State<T> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     forcePortraitMode();
     super.dispose();

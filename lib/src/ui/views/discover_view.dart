@@ -164,9 +164,9 @@ class _DiscoverViewState extends State<DiscoverView> {
               child: Consumer2<ConsumetProvider, IsarProvider>(
                 builder: (context, consumetProvider, isarProvider, child) {
                   // Various Data Sources:
-                  List<AnimeResult> trendingAnime =
+                  List<AnimeResult>? trendingAnime =
                       consumetProvider.trendingAnime;
-                  List<AnimeResult> popularAnime =
+                  List<AnimeResult>? popularAnime =
                       consumetProvider.popularAnime;
                   List<AnimeEpisode> currentlyWatching =
                       isarProvider.currentlyWatching;
@@ -184,11 +184,11 @@ class _DiscoverViewState extends State<DiscoverView> {
 
                   if (consumetIsReady) {
                     // If not empty, add data to cards in a list & save to variable.
-                    trendingAnime.isNotEmpty
+                    trendingAnime != null
                         ? trendingAnimeCards =
                             createContentCardWidgetList(trendingAnime)
                         : null;
-                    popularAnime.isNotEmpty
+                    popularAnime != null
                         ? popularAnimeCards =
                             createContentCardWidgetList(popularAnime)
                         : null;
@@ -288,21 +288,6 @@ class _DiscoverViewState extends State<DiscoverView> {
         ),
       ),
     );
-  }
-
-  List<ContentCard> _createContentCardWidgetList(List<AnimeResult> data) {
-    List<ContentCard> cards = [];
-    for (int i = 0; i < data.length; i++) {
-      cards.add(
-        ContentCard(
-          result: data[i],
-          spacing: i < data.length
-              ? const EdgeInsets.only(right: 12)
-              : const EdgeInsets.only(left: 12),
-        ),
-      );
-    }
-    return cards;
   }
 
   List<CurrentlyWatchingCard> _createCurrentlyWatchingCardWidgetList(

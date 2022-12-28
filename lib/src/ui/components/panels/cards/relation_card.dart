@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
 
 class RelationCard extends StatelessWidget {
   final AnimeResult relation;
@@ -31,11 +33,18 @@ class RelationCard extends StatelessWidget {
 
     if (unsupportedFormats.every((format) => format != relation.format) &&
         unsupportedStatuses.every((status) => status != relation.status)) {
-      return BouncingWidget(
-        scaleFactor: 0.5,
-        duration: const Duration(milliseconds: 200),
-        onPressed: () => pushToInfoView(context, relation),
-        child: _card(width, height, colors),
+      return Consumer<ConsumetProvider>(
+        builder: (context, consumetProvider, child) {
+          return BouncingWidget(
+            scaleFactor: 0.5,
+            duration: const Duration(milliseconds: 200),
+            onPressed: () {
+              consumetProvider.selectAnimeAndGetInfo(relation);
+              selectAnimeOrMangaInfoView(context, relation);
+            },
+            child: _card(width, height, colors),
+          );
+        },
       );
     }
 

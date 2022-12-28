@@ -3,14 +3,12 @@ import 'package:chewie/chewie.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:tengoku/src/models/source.dart';
-import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/mixins/enforce_required_orientation_mixin.dart';
 import 'package:tengoku/src/ui/components/player/custom_player_controls.dart';
 
 class PlayerView extends StatefulWidget {
-  final AnimeEpisode episode;
-  const PlayerView({super.key, required this.episode});
+  const PlayerView({super.key});
 
   @override
   State<PlayerView> createState() => _PlayerViewState();
@@ -28,8 +26,8 @@ class _PlayerViewState extends State<PlayerView>
     return WillPopScope(
       onWillPop: () async =>
           Navigator.of(context).userGestureInProgress ? false : true,
-      child: Consumer<ConsumetProvider>(
-        builder: ((context, provider, child) {
+      child: Builder(
+        builder: (context) {
           if (_chewieController != null) {
             return SafeArea(
               child: Scaffold(
@@ -41,21 +39,20 @@ class _PlayerViewState extends State<PlayerView>
           return const Center(
             child: CircularProgressIndicator(color: Colors.white),
           );
-        }),
+        },
       ),
     );
   }
 
-  Future<void> initPlayer() async {
-    final ConsumetProvider provider =
+  Future<void> _initialize() async {
+    final ConsumetProvider consumetProvider =
         Provider.of<ConsumetProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
-        await provider.getStreamingLinksFromEpisodeId(widget.episode.id);
         // When source fetched; if not null, find and use default quality URL.
-        if (provider.currentAnimeSource != null) {
-          final Source source = provider.currentAnimeSource!;
+        if (consumetProvider.currentEpisodeSource != null) {
+          final Source source = consumetProvider.currentEpisodeSource!;
           src = source.videos
               .where((video) => video.quality == 'default')
               .first
@@ -71,8 +68,8 @@ class _PlayerViewState extends State<PlayerView>
             customControls: CustomPlayerControls(
               backgroundColor: Colors.transparent,
               iconColor: Colors.white,
-              animeInfo: provider.currentAnimeInfo!,
-              episode: widget.episode,
+              animeInfo: consumetProvider.currentAnimeInfo!,
+              episode: consumetProvider.selectedEpisode!,
             ),
             // TODO: Error Builder...
           );
@@ -84,7 +81,7 @@ class _PlayerViewState extends State<PlayerView>
   @override
   void initState() {
     super.initState();
-    initPlayer();
+    _initialize();
   }
 
   @override

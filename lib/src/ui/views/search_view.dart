@@ -70,37 +70,35 @@ class _SearchViewState extends State<SearchView> {
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-        child: Consumer<ConsumetProvider>(
-          builder: ((context, provider, child) {
-            List<AnimeResult> animeResults = provider.animeResults;
+        child: Consumer<ConsumetProvider>(builder: (context, provider, child) {
+          List<AnimeResult>? animeResults = provider.animeResults;
 
-            if (animeResults.isNotEmpty) {
-              List<SearchResultTile> tiles = [];
-              // Map each result to a SearchResultTile, unless not yet released.
-              for (int i = 0; i < animeResults.length; i++) {
-                final result = animeResults[i];
-                if (result.status != MediaStatus.notYetAired) {
-                  tiles.add(
-                    SearchResultTile(
-                      result: result,
-                      spacing: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  );
-                }
-              }
-
-              return Column(
-                children: <Widget>[
-                  ContentSlider(
-                    direction: Axis.vertical,
-                    panels: tiles,
+          if (animeResults != null) {
+            List<SearchResultTile> tiles = [];
+            // Map each result to a SearchResultTile, unless not yet released.
+            for (int i = 0; i < animeResults.length; i++) {
+              final result = animeResults[i];
+              if (result.status != MediaStatus.notYetAired) {
+                tiles.add(
+                  SearchResultTile(
+                    result: result,
+                    spacing: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                ],
-              );
+                );
+              }
             }
-            return const SizedBox.shrink();
-          }),
-        ),
+
+            return Column(
+              children: <Widget>[
+                ContentSlider(
+                  direction: Axis.vertical,
+                  panels: tiles,
+                ),
+              ],
+            );
+          }
+          return const SizedBox.shrink();
+        }),
       ),
     );
   }
@@ -108,10 +106,11 @@ class _SearchViewState extends State<SearchView> {
   void _updateSearchResults(String query, int? page, int? resultsPerPage) {
     _debouncer.run(
       () async {
-        final provider = Provider.of<ConsumetProvider>(context, listen: false);
+        final consumetProvider =
+            Provider.of<ConsumetProvider>(context, listen: false);
         // Only fire request if query is different than last time.
-        if (provider.latestQuery != query) {
-          await provider.basicAnimeSearch(query, page, resultsPerPage);
+        if (consumetProvider.latestQuery != query) {
+          await consumetProvider.basicAnimeSearch(query, page, resultsPerPage);
         }
       },
     );

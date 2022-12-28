@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
 import 'package:provider/provider.dart';
-import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/ui/theme/global.dart';
-import 'package:tengoku/src/ui/views/root_view.dart';
+import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/providers/isar_provider.dart';
+import 'package:tengoku/src/router/navigator_wrapper.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/mixins/force_portrait_mode_mixin.dart';
 
@@ -25,18 +25,19 @@ class Application extends StatelessWidget with ForcePortraitModeMixin {
     super.build(context);
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<IsarProvider>(
-          create: (_) => IsarProvider(isar),
-        ),
         ChangeNotifierProvider<ConsumetProvider>(
           create: (_) => ConsumetProvider(),
+        ),
+        ChangeNotifierProvider<IsarProvider>(
+          create: (_) => IsarProvider(isar),
         ),
       ],
       child: MaterialApp(
         theme: Themes.light,
         darkTheme: Themes.dark,
         themeMode: ThemeMode.system,
-        home: const RootView(),
+        initialRoute: NavigatorWrapper.initialRoute,
+        routes: NavigatorWrapper.routes,
         debugShowCheckedModeBanner: false,
       ),
     );

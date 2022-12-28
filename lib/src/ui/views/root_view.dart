@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/utils/android_navigation_mode.dart';
 import 'package:tengoku/src/ui/components/navigation/navigation_bar.dart'
@@ -53,7 +52,7 @@ class _RootViewState extends State<RootView> {
     );
   }
 
-  Future<void> initPlatformState() async {
+  Future<void> _initPlatformState() async {
     // ignore: no_leading_underscores_for_local_identifiers
     DeviceNavigationMode _navigationMode;
 
@@ -73,7 +72,7 @@ class _RootViewState extends State<RootView> {
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _initPlatformState();
   }
 
   @override

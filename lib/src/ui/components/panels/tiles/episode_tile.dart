@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:tengoku/src/router/routes.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
-import 'package:tengoku/src/ui/views/player_view.dart';
+import 'package:tengoku/src/router/navigator_wrapper.dart';
 import 'package:tengoku/src/providers/isar_provider.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
 
 class EpisodeTile extends StatelessWidget {
   final AnimeEpisode episode;
@@ -14,14 +16,16 @@ class EpisodeTile extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Consumer<IsarProvider>(
-      builder: (context, isarProvider, child) {
+
+    return Consumer2<ConsumetProvider, IsarProvider>(
+      builder: (context, consumetProvider, isarProvider, child) {
         return BouncingWidget(
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 200),
           onPressed: () {
+            consumetProvider.selectEpisodeAndGetStreamingLinks(episode);
             _startWatchingEpisode(isarProvider);
-            _pushToPlayerView(context);
+            NavigatorWrapper.push(context, Routes.player);
           },
           child: Container(
             width: double.infinity,
@@ -89,13 +93,5 @@ class EpisodeTile extends StatelessWidget {
     if (isarProvider.currentEpisode == null) {
       isarProvider.startWatchingEpisode(episode);
     }
-  }
-
-  _pushToPlayerView(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => PlayerView(episode: episode),
-      ),
-    );
   }
 }

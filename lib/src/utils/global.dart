@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tengoku/src/types/genres.dart';
 import 'package:tengoku/src/types/seasons.dart';
+import 'package:tengoku/src/router/routes.dart';
 import 'package:tengoku/src/types/media_format.dart';
 import 'package:tengoku/src/types/media_status.dart';
-import 'package:tengoku/src/ui/views/info_view.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/router/navigator_wrapper.dart';
 import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 
 const Map<String, MediaStatus> mediaStatusOptions = {
@@ -111,6 +112,19 @@ Genres evaluateGenre(String? rawGenre) {
   return enumerated ?? Genres.none;
 }
 
+selectAnimeOrMangaInfoView(BuildContext context, AnimeResult result) {
+  switch (result.format) {
+    // TODO: Implement search with manga...
+    case MediaFormat.manga:
+    case MediaFormat.oneShot:
+      NavigatorWrapper.push(context, Routes.mangaInfo);
+      break;
+    // If not a manga/one-shot, push to animeInfo.
+    default:
+      NavigatorWrapper.push(context, Routes.animeInfo);
+  }
+}
+
 List<ContentCard> createContentCardWidgetList(List<AnimeResult> data) {
   List<ContentCard> cards = [];
   for (int i = 0; i < data.length; i++) {
@@ -124,14 +138,6 @@ List<ContentCard> createContentCardWidgetList(List<AnimeResult> data) {
     );
   }
   return cards;
-}
-
-pushToInfoView(BuildContext context, AnimeResult data) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => InfoView(initialData: data),
-    ),
-  );
 }
 
 const String userAgent =
