@@ -113,13 +113,17 @@ class ConsumetProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> selectEpisodeAndGetStreamingLinks(AnimeEpisode episode) async {
+  void selectEpisode(AnimeEpisode episode) {
+    _setLoading(true);
+    _selectedEpisode = episode;
+    _setLoading(false);
+  }
+
+  Future<void> getCurrentEpisodeStreamingLinks() async {
     _setLoading(true);
 
-    // Update selected episode, get streaming links & update current episode source.
-    _selectedEpisode = episode;
     final Source? episodeSource =
-        await _service.getStreamingLinksFromEpisodeId(episode.id);
+        await _service.getStreamingLinksFromEpisodeId(selectedEpisode!.id);
     _currentEpisodeSource = episodeSource;
 
     _setLoading(false);

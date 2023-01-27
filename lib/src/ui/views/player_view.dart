@@ -50,6 +50,7 @@ class _PlayerViewState extends State<PlayerView>
 
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) async {
+        await consumetProvider.getCurrentEpisodeStreamingLinks();
         // When source fetched; if not null, find and use default quality URL.
         if (consumetProvider.currentEpisodeSource != null) {
           final Source source = consumetProvider.currentEpisodeSource!;
@@ -59,10 +60,10 @@ class _PlayerViewState extends State<PlayerView>
               .url;
           _videoPlayerController =
               VideoPlayerController.network(src!, httpHeaders: source.headers);
+          await _videoPlayerController!.initialize();
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController!,
             aspectRatio: 16 / 9,
-            autoPlay: true,
             allowFullScreen: true,
             fullScreenByDefault: true,
             customControls: CustomPlayerControls(
@@ -73,6 +74,7 @@ class _PlayerViewState extends State<PlayerView>
             ),
             // TODO: Error Builder...
           );
+          setState(() {});
         }
       },
     );

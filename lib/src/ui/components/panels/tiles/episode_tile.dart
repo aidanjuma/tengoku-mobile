@@ -23,8 +23,8 @@ class EpisodeTile extends StatelessWidget {
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 200),
           onPressed: () {
-            consumetProvider.selectEpisodeAndGetStreamingLinks(episode);
-            _startWatchingEpisode(isarProvider);
+            consumetProvider.selectEpisode(episode);
+            _registerWatchingEpisode(isarProvider);
             NavigatorWrapper.push(context, Routes.player);
           },
           child: Container(
@@ -88,7 +88,7 @@ class EpisodeTile extends StatelessWidget {
     );
   }
 
-  Future<void> _startWatchingEpisode(IsarProvider isarProvider) async {
+  Future<void> _registerWatchingEpisode(IsarProvider isarProvider) async {
     await isarProvider.returnEpisodeIfStored(episode);
     if (isarProvider.currentEpisode == null) {
       isarProvider.startWatchingEpisode(episode);

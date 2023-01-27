@@ -230,10 +230,10 @@ class _DiscoverViewState extends State<DiscoverView> {
                                       ),
                                     ),
                                   ),
-                                  consumetIsReady
+                                  trendingAnimeCards != null && consumetIsReady
                                       ? ContentSlider(
                                           direction: Axis.horizontal,
-                                          panels: trendingAnimeCards!,
+                                          panels: trendingAnimeCards,
                                         )
                                       : const SizedBox.shrink(),
                                 ],
@@ -276,6 +276,47 @@ class _DiscoverViewState extends State<DiscoverView> {
                                 ],
                               ),
                             );
+                          },
+                        ),
+                      ),
+                      /* Builder: Continue Watching */
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: height * 0.015),
+                        child: Builder(
+                          builder: (context) {
+                            if (currentlyWatchingCards != null) {
+                              return SizedBox(
+                                width: double.infinity,
+                                height: height * 0.175,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                        bottom: height * 0.01,
+                                      ),
+                                      child: const Text(
+                                        'Continue Watching',
+                                        style: TextStyle(
+                                          fontFamily: 'Lexend',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    isarIsReady
+                                        ? ContentSlider(
+                                            direction: Axis.horizontal,
+                                            panels: currentlyWatchingCards,
+                                          )
+                                        : const SizedBox.shrink(),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            return const SizedBox.shrink();
                           },
                         ),
                       ),
