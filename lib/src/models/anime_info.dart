@@ -1,7 +1,7 @@
 import 'anime_result.dart';
 import 'anime_episode.dart';
-import '../types/genres.dart';
-import '../types/seasons.dart';
+import '../enums/genres.dart';
+import '../enums/seasons.dart';
 
 class AnimeInfo extends AnimeResult {
   int? malId;

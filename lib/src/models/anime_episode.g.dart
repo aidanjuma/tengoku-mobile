@@ -32,15 +32,15 @@ const AnimeEpisodeSchema = CollectionSchema(
       name: r'durationInSeconds',
       type: IsarType.long,
     ),
-    r'hasWatched': PropertySchema(
+    r'episodeId': PropertySchema(
       id: 3,
+      name: r'episodeId',
+      type: IsarType.string,
+    ),
+    r'hasWatched': PropertySchema(
+      id: 4,
       name: r'hasWatched',
       type: IsarType.bool,
-    ),
-    r'id': PropertySchema(
-      id: 4,
-      name: r'id',
-      type: IsarType.string,
     ),
     r'image': PropertySchema(
       id: 5,
@@ -62,18 +62,23 @@ const AnimeEpisodeSchema = CollectionSchema(
       name: r'number',
       type: IsarType.long,
     ),
-    r'releaseDate': PropertySchema(
+    r'parentIsarId': PropertySchema(
       id: 9,
+      name: r'parentIsarId',
+      type: IsarType.long,
+    ),
+    r'releaseDate': PropertySchema(
+      id: 10,
       name: r'releaseDate',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'title',
       type: IsarType.string,
     ),
     r'url': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'url',
       type: IsarType.string,
     )
@@ -104,7 +109,7 @@ int _animeEpisodeEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
-  bytesCount += 3 + object.id.length * 3;
+  bytesCount += 3 + object.episodeId.length * 3;
   {
     final value = object.image;
     if (value != null) {
@@ -141,15 +146,16 @@ void _animeEpisodeSerialize(
   writer.writeDouble(offsets[0], object.amountWatched);
   writer.writeString(offsets[1], object.description);
   writer.writeLong(offsets[2], object.durationInSeconds);
-  writer.writeBool(offsets[3], object.hasWatched);
-  writer.writeString(offsets[4], object.id);
+  writer.writeString(offsets[3], object.episodeId);
+  writer.writeBool(offsets[4], object.hasWatched);
   writer.writeString(offsets[5], object.image);
   writer.writeBool(offsets[6], object.isFiller);
   writer.writeBool(offsets[7], object.isWatching);
   writer.writeLong(offsets[8], object.number);
-  writer.writeString(offsets[9], object.releaseDate);
-  writer.writeString(offsets[10], object.title);
-  writer.writeString(offsets[11], object.url);
+  writer.writeLong(offsets[9], object.parentIsarId);
+  writer.writeString(offsets[10], object.releaseDate);
+  writer.writeString(offsets[11], object.title);
+  writer.writeString(offsets[12], object.url);
 }
 
 AnimeEpisode _animeEpisodeDeserialize(
@@ -162,15 +168,16 @@ AnimeEpisode _animeEpisodeDeserialize(
     amountWatched: reader.readDoubleOrNull(offsets[0]) ?? 0,
     description: reader.readStringOrNull(offsets[1]),
     durationInSeconds: reader.readLongOrNull(offsets[2]),
-    hasWatched: reader.readBoolOrNull(offsets[3]) ?? false,
-    id: reader.readString(offsets[4]),
+    episodeId: reader.readString(offsets[3]),
+    hasWatched: reader.readBoolOrNull(offsets[4]) ?? false,
     image: reader.readStringOrNull(offsets[5]),
     isFiller: reader.readBoolOrNull(offsets[6]),
     isWatching: reader.readBoolOrNull(offsets[7]) ?? false,
     number: reader.readLong(offsets[8]),
-    releaseDate: reader.readStringOrNull(offsets[9]),
-    title: reader.readStringOrNull(offsets[10]),
-    url: reader.readStringOrNull(offsets[11]),
+    parentIsarId: reader.readLongOrNull(offsets[9]),
+    releaseDate: reader.readStringOrNull(offsets[10]),
+    title: reader.readStringOrNull(offsets[11]),
+    url: reader.readStringOrNull(offsets[12]),
   );
   object.isarId = id;
   return object;
@@ -190,9 +197,9 @@ P _animeEpisodeDeserializeProp<P>(
     case 2:
       return (reader.readLongOrNull(offset)) as P;
     case 3:
-      return (reader.readBoolOrNull(offset) ?? false) as P;
-    case 4:
       return (reader.readString(offset)) as P;
+    case 4:
+      return (reader.readBoolOrNull(offset) ?? false) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
@@ -202,10 +209,12 @@ P _animeEpisodeDeserializeProp<P>(
     case 8:
       return (reader.readLong(offset)) as P;
     case 9:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
+      return (reader.readStringOrNull(offset)) as P;
+    case 12:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -603,29 +612,21 @@ extension AnimeEpisodeQueryFilter
   }
 
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
-      hasWatchedEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'hasWatched',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idEqualTo(
+      episodeIdEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idGreaterThan(
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -633,14 +634,15 @@ extension AnimeEpisodeQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idLessThan(
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -648,14 +650,15 @@ extension AnimeEpisodeQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idBetween(
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -664,7 +667,7 @@ extension AnimeEpisodeQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
+        property: r'episodeId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -674,71 +677,82 @@ extension AnimeEpisodeQueryFilter
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idStartsWith(
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idEndsWith(
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idContains(
-      String value,
-      {bool caseSensitive = true}) {
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
+        property: r'episodeId',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
+        property: r'episodeId',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition> idIsEmpty() {
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      episodeIdIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
+        property: r'episodeId',
         value: '',
       ));
     });
   }
 
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
-      idIsNotEmpty() {
+      episodeIdIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
+        property: r'episodeId',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      hasWatchedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasWatched',
+        value: value,
       ));
     });
   }
@@ -1035,6 +1049,80 @@ extension AnimeEpisodeQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'number',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'parentIsarId',
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'parentIsarId',
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdEqualTo(int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'parentIsarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'parentIsarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'parentIsarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterFilterCondition>
+      parentIsarIdBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'parentIsarId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -1547,6 +1635,18 @@ extension AnimeEpisodeQuerySortBy
     });
   }
 
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByEpisodeId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'episodeId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByEpisodeIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'episodeId', Sort.desc);
+    });
+  }
+
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByHasWatched() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasWatched', Sort.asc);
@@ -1557,18 +1657,6 @@ extension AnimeEpisodeQuerySortBy
       sortByHasWatchedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasWatched', Sort.desc);
-    });
-  }
-
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
@@ -1618,6 +1706,19 @@ extension AnimeEpisodeQuerySortBy
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByNumberDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'number', Sort.desc);
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> sortByParentIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIsarId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy>
+      sortByParentIsarIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIsarId', Sort.desc);
     });
   }
 
@@ -1701,6 +1802,18 @@ extension AnimeEpisodeQuerySortThenBy
     });
   }
 
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByEpisodeId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'episodeId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByEpisodeIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'episodeId', Sort.desc);
+    });
+  }
+
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByHasWatched() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasWatched', Sort.asc);
@@ -1711,18 +1824,6 @@ extension AnimeEpisodeQuerySortThenBy
       thenByHasWatchedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'hasWatched', Sort.desc);
-    });
-  }
-
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
-  }
-
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
@@ -1787,6 +1888,19 @@ extension AnimeEpisodeQuerySortThenBy
     });
   }
 
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByParentIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIsarId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy>
+      thenByParentIsarIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'parentIsarId', Sort.desc);
+    });
+  }
+
   QueryBuilder<AnimeEpisode, AnimeEpisode, QAfterSortBy> thenByReleaseDate() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'releaseDate', Sort.asc);
@@ -1848,16 +1962,16 @@ extension AnimeEpisodeQueryWhereDistinct
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctByHasWatched() {
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctByEpisodeId(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'hasWatched');
+      return query.addDistinctBy(r'episodeId', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctById(
-      {bool caseSensitive = true}) {
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctByHasWatched() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'hasWatched');
     });
   }
 
@@ -1883,6 +1997,12 @@ extension AnimeEpisodeQueryWhereDistinct
   QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctByNumber() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'number');
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, AnimeEpisode, QDistinct> distinctByParentIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'parentIsarId');
     });
   }
 
@@ -1935,15 +2055,15 @@ extension AnimeEpisodeQueryProperty
     });
   }
 
-  QueryBuilder<AnimeEpisode, bool, QQueryOperations> hasWatchedProperty() {
+  QueryBuilder<AnimeEpisode, String, QQueryOperations> episodeIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'hasWatched');
+      return query.addPropertyName(r'episodeId');
     });
   }
 
-  QueryBuilder<AnimeEpisode, String, QQueryOperations> idProperty() {
+  QueryBuilder<AnimeEpisode, bool, QQueryOperations> hasWatchedProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
+      return query.addPropertyName(r'hasWatched');
     });
   }
 
@@ -1968,6 +2088,12 @@ extension AnimeEpisodeQueryProperty
   QueryBuilder<AnimeEpisode, int, QQueryOperations> numberProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'number');
+    });
+  }
+
+  QueryBuilder<AnimeEpisode, int?, QQueryOperations> parentIsarIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'parentIsarId');
     });
   }
 

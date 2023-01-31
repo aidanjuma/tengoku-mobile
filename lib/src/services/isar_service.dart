@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 
 class IsarService {
@@ -6,29 +7,41 @@ class IsarService {
 
   IsarService({required this.isar});
 
+  /* Save AnimeResult object to disk for linking to AnimeEpisode objects. */
+  Future<void> saveAnimeResult(AnimeResult animeResult) async {
+    await isar.writeTxn(() async => await isar.animeResults.put(animeResult));
+  }
+
+  /* When navigating to episode, use to check if parent AnimeResult is stored; return if so. */
+  Future<AnimeResult?> returnAnimeResultIfStored(int isarId) async {
+    return await isar.animeResults.get(isarId);
+  }
+
   /* When navigating to episode, use to check if stored; return episode if so. */
   Future<AnimeEpisode?> returnEpisodeIfStored(String episodeId) async {
-    return await isar.animeEpisodes.filter().idEqualTo(episodeId).findFirst();
+    return await isar.animeEpisodes
+        .filter()
+        .episodeIdEqualTo(episodeId)
+        .findFirst();
   }
 
   /* When episode has been selected for viewing, add to database. */
-  Future<void> startWatchingEpisode(AnimeEpisode episode) async {
+  Future<AnimeEpisode> startWatchingEpisode(AnimeEpisode episode) async {
     episode.isWatching = true;
     await isar.writeTxn(() async => await isar.animeEpisodes.put(episode));
+    return episode;
   }
 
   /* When navigated to player, add duration in seconds (once available). */
   Future<void> addEpisodeDuration(
       Id episodeIsarId, int durationInSeconds) async {
     final AnimeEpisode? episode = await isar.animeEpisodes.get(episodeIsarId);
-    switch (episode?.durationInSeconds) {
-      case null:
-        return;
-      default:
-        episode!.durationInSeconds = durationInSeconds;
-        await isar.writeTxn(
-          () async => await isar.animeEpisodes.put(episode),
-        );
+
+    if (episode?.durationInSeconds == null) {
+      episode!.durationInSeconds = durationInSeconds;
+      await isar.writeTxn(
+        () async => await isar.animeEpisodes.put(episode),
+      );
     }
   }
 
@@ -54,7 +67,7 @@ class IsarService {
   Future<void> deleteAllEpisodes() async {
     await isar.writeTxn(() async {
       // All episodes have an ID; find all and delete all.
-      await isar.animeEpisodes.filter().idIsNotEmpty().deleteAll();
+      await isar.animeEpisodes.filter().episodeIdIsNotEmpty().deleteAll();
     });
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/router/routes.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/router/navigator_wrapper.dart';
@@ -23,8 +24,7 @@ class EpisodeTile extends StatelessWidget {
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 200),
           onPressed: () {
-            consumetProvider.selectEpisode(episode);
-            _registerWatchingEpisode(isarProvider);
+            _watchEpisode(consumetProvider, isarProvider);
             NavigatorWrapper.push(context, Routes.player);
           },
           child: Container(
@@ -88,10 +88,10 @@ class EpisodeTile extends StatelessWidget {
     );
   }
 
-  Future<void> _registerWatchingEpisode(IsarProvider isarProvider) async {
-    await isarProvider.returnEpisodeIfStored(episode);
-    if (isarProvider.currentEpisode == null) {
-      isarProvider.startWatchingEpisode(episode);
-    }
+  Future<void> _watchEpisode(
+      ConsumetProvider consumetProvider, IsarProvider isarProvider) async {
+    await isarProvider.saveAnimeResult(consumetProvider.selectedAnime!);
+    await consumetProvider.selectEpisode(episode);
+    await registerWatchingEpisode(isarProvider, episode);
   }
 }

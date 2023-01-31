@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/types/genres.dart';
+import 'package:tengoku/src/enums/genres.dart';
 import 'package:tengoku/src/utils/global.dart';
 
 class GenresPill extends StatelessWidget {

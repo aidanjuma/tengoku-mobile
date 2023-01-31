@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/utils/debouncer.dart';
-import 'package:tengoku/src/types/media_status.dart';
+import 'package:tengoku/src/enums/media_status.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/ui/components/sliders/content_slider.dart';

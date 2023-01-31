@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:tengoku/src/models/intro_timings.dart';
 import 'package:tengoku/src/models/subtitle.dart';
-import 'package:tengoku/src/types/genres.dart';
+import 'package:tengoku/src/enums/genres.dart';
 import 'package:tengoku/src/models/video.dart';
 import 'package:tengoku/src/models/source.dart';
-import 'package:tengoku/src/types/item_title.dart';
+import 'package:tengoku/src/models/item_title.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
@@ -81,14 +81,16 @@ class ConsumetService {
       return data;
     });
 
+    final ItemTitle title = ItemTitle(
+      english: data['title']['english'],
+      romaji: data['title']['romaji'],
+      native: data['title']['native'],
+    );
+
     // TODO: Implement 'characters' into the model.
     final AnimeInfo animeInfo = AnimeInfo(
       id: id,
-      title: ItemTitle(
-        english: data['title']['english'],
-        romaji: data['title']['romaji'],
-        native: data['title']['native'],
-      ),
+      title: title,
       coverImage: data['image'],
       bannerImage: data['cover'],
       status: utils.evaluateMediaStatus(data['status']),
@@ -110,7 +112,7 @@ class ConsumetService {
       color: data['color'],
       recommendations: _processResults(data['recommendations']),
       relations: _processResults(data['relations']),
-      episodes: _processEpisodes(data['episodes']),
+      episodes: _processEpisodes(id, title, data['episodes']),
     );
 
     return animeInfo;
@@ -195,12 +197,14 @@ class ConsumetService {
     return genreList;
   }
 
-  List<AnimeEpisode> _processEpisodes(List<dynamic> episodes) {
+  List<AnimeEpisode> _processEpisodes(
+      int anilistId, ItemTitle title, List<dynamic> episodes) {
     List<AnimeEpisode> episodeList = [];
     for (int i = 0; i < episodes.length; i++) {
       final item = episodes[i];
       final AnimeEpisode episode = AnimeEpisode(
-        id: item['id'],
+        // Barebones AnimeResult for anime title information (video player).
+        episodeId: item['id'],
         number: item['number'],
         title: item['title'],
         description: item['description'],

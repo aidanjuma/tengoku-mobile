@@ -5,8 +5,9 @@ part 'anime_episode.g.dart';
 @collection
 class AnimeEpisode {
   Id isarId = Isar.autoIncrement;
-  final String id;
+  final String episodeId;
   final int number;
+  int? parentIsarId;
   String? title;
   String? description;
   bool? isFiller;
@@ -18,14 +19,15 @@ class AnimeEpisode {
   bool isWatching;
   // Between 0 & 1: represents percentage of episode watched.
   double amountWatched;
-  // Duration in seconds; to show 'Xm Ys remaining' on continue watching card.
+  // Duration; main use found in continue watching card.
   int? durationInSeconds;
   // NOTE: If isWatching == false && amountWatched >= 0.95, hasWatched == true.
   bool hasWatched;
 
   AnimeEpisode({
-    required this.id,
+    required this.episodeId,
     required this.number,
+    this.parentIsarId,
     this.title,
     this.description,
     this.isFiller,

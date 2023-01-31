@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tengoku/src/types/genres.dart';
-import 'package:tengoku/src/types/seasons.dart';
+import 'package:tengoku/src/models/anime_episode.dart';
+import 'package:tengoku/src/enums/genres.dart';
+import 'package:tengoku/src/enums/seasons.dart';
 import 'package:tengoku/src/router/routes.dart';
-import 'package:tengoku/src/types/media_format.dart';
-import 'package:tengoku/src/types/media_status.dart';
+import 'package:tengoku/src/enums/media_format.dart';
+import 'package:tengoku/src/enums/media_status.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/providers/isar_provider.dart';
 import 'package:tengoku/src/router/navigator_wrapper.dart';
 import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
 
@@ -122,6 +124,14 @@ selectAnimeOrMangaInfoView(BuildContext context, AnimeResult result) {
     // If not a manga/one-shot, push to animeInfo.
     default:
       NavigatorWrapper.push(context, Routes.animeInfo);
+  }
+}
+
+Future<void> registerWatchingEpisode(
+    IsarProvider isarProvider, AnimeEpisode episode) async {
+  await isarProvider.returnEpisodeIfStored(episode);
+  if (isarProvider.currentEpisode == null) {
+    await isarProvider.startWatchingEpisode(episode);
   }
 }
 
