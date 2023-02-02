@@ -81,29 +81,29 @@ class CurrentlyWatchingCard extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Stack(
-                    children: <Widget>[
-                      Container(
-                        height: 4,
-                        clipBehavior: Clip.antiAlias,
-                        margin: const EdgeInsets.only(top: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xff22272e),
-                        ),
-                      ),
-                      Container(
-                        height: 4,
-                        width: episode.amountWatched,
-                        clipBehavior: Clip.antiAlias,
-                        margin: const EdgeInsets.only(top: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: const Color(0xffbb5350),
-                        ),
-                      ),
-                    ],
-                  ),
+                  Container(
+                    height: 4,
+                    clipBehavior: Clip.antiAlias,
+                    margin: const EdgeInsets.only(top: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Stack(
+                          children: <Widget>[
+                            Container(
+                              color: const Color(0xff22272e),
+                            ),
+                            Container(
+                                width: episode.amountWatched *
+                                    constraints.maxWidth,
+                                color: const Color(0xffbb5350)),
+                          ],
+                        );
+                      },
+                    ),
+                  )
                 ],
               ),
             ),

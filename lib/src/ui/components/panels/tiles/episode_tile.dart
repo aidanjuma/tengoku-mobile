@@ -90,8 +90,8 @@ class EpisodeTile extends StatelessWidget {
 
   Future<void> _watchEpisode(
       ConsumetProvider consumetProvider, IsarProvider isarProvider) async {
-    await isarProvider.saveAnimeResult(consumetProvider.selectedAnime!);
     await consumetProvider.selectEpisode(episode);
+    await isarProvider.saveAnimeResult(consumetProvider.selectedAnime!);
     await registerWatchingEpisode(isarProvider, episode);
   }
 }
