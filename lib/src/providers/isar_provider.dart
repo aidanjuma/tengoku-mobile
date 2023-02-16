@@ -88,7 +88,7 @@ class IsarProvider extends ChangeNotifier {
     final List<AnimeEpisode> currentlyWatching =
         await _service.getListOfCurrentlyWatching();
 
-    _currentlyWatching = currentlyWatching;
+    _currentlyWatching = currentlyWatching.reversed.toList();
     _setLoading(false);
   }
 
