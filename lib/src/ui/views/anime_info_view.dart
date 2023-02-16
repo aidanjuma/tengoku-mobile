@@ -6,6 +6,7 @@ import 'package:tengoku/src/enums/genres.dart';
 import 'package:tengoku/src/models/anime_info.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
+import 'package:tengoku/src/utils/info_view_helpers.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
 import 'package:tengoku/src/ui/components/panels/pills/genres_pill.dart';
@@ -31,7 +32,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
         return WillPopScope(
           onWillPop: () async {
             consumetProvider.infoViewCacheStack.queue.length > 1
-                ? consumetProvider.replaceAnimeInfoWithPrevious()
+                ? await consumetProvider.replaceAnimeInfoWithPrevious()
                 : null;
             return true;
           },
@@ -69,7 +70,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                           fit: StackFit.loose,
                           children: <Widget>[
                             /* Banner BG Image */
-                            _renderBackgroundImage(height),
+                            renderBackgroundImage(height),
                             Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -196,6 +197,8 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                               List<Genres>? genres = animeInfo.genres!;
                               List<AnimeEpisode>? episodes =
                                   animeInfo.episodes!;
+                              List<List<AnimeEpisode>>? episodePages =
+                                  consumetProvider.episodePages;
 
                               /* Relations, Genres & Episodes List */
                               return Column(
@@ -208,23 +211,8 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                     child: Builder(
                                       builder: (context) {
                                         if (relations.isNotEmpty) {
-                                          List<RelationCard> cards = [];
-                                          /* Map n relation(s) to n RelationCard(s) */
-                                          for (int i = 0;
-                                              i < relations.length;
-                                              i++) {
-                                            final relation = relations[i];
-                                            cards.add(
-                                              RelationCard(
-                                                relation: relation,
-                                                spacing: i < relations.length
-                                                    ? const EdgeInsets.only(
-                                                        right: 12)
-                                                    : const EdgeInsets.only(
-                                                        left: 12),
-                                              ),
-                                            );
-                                          }
+                                          List<RelationCard> cards =
+                                              mapRelationsCards(relations);
                                           /* Relations Widget */
                                           return SizedBox(
                                             width: double.infinity,
@@ -264,21 +252,8 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                   /* Builder: Genres */
                                   Builder(builder: (context) {
                                     if (genres.isNotEmpty) {
-                                      List<GenresPill> pills = [];
-                                      /* Map n genre(s) to n GenresPill(s) */
-                                      for (int i = 0; i < genres.length; i++) {
-                                        final genre = genres[i];
-                                        pills.add(
-                                          GenresPill(
-                                            genre: genre,
-                                            spacing: i < genres.length
-                                                ? const EdgeInsets.only(
-                                                    right: 8)
-                                                : const EdgeInsets.only(
-                                                    left: 8),
-                                          ),
-                                        );
-                                      }
+                                      List<GenresPill> pills =
+                                          mapGenresPills(genres);
                                       /* Genres Widget */
                                       return SizedBox(
                                         width: double.infinity,
@@ -299,16 +274,9 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                   Container(
                                     margin: EdgeInsets.only(top: height * 0.02),
                                     child: Builder(builder: (context) {
-                                      if (episodes.isNotEmpty) {
-                                        List<EpisodeTile> tiles = [];
-                                        /* Map n episode(s) to n EpisodeTile(s) */
-                                        for (int i = 0;
-                                            i < episodes.length;
-                                            i++) {
-                                          final episode = episodes[i];
-                                          tiles.add(
-                                              EpisodeTile(episode: episode));
-                                        }
+                                      if (episodePages != null) {
+                                        List<EpisodeTile> tiles =
+                                            mapEpisodeTiles(episodes);
                                         /* Episodes List Widget */
                                         return SizedBox(
                                           width: double.infinity,
@@ -353,30 +321,6 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                   ),
                 );
               },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _renderBackgroundImage(double height) {
-    return Consumer<ConsumetProvider>(
-      builder: (context, consumetProvider, child) {
-        String? image = consumetProvider.selectedAnime!.bannerImage;
-        // Should theoretically always have cover image; fallback if no bannerImage.
-        image ??= consumetProvider.selectedAnime!.coverImage;
-        return Container(
-          width: double.infinity,
-          height: height * 0.355,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(image!),
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.2),
-                BlendMode.darken,
-              ),
             ),
           ),
         );

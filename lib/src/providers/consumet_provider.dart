@@ -36,6 +36,14 @@ class ConsumetProvider extends ChangeNotifier {
   AnimeResult? get selectedAnime => _selectedAnime;
   AnimeInfo? _currentAnimeInfo;
   AnimeInfo? get currentAnimeInfo => _currentAnimeInfo;
+
+  /* Pagination: Episode List */
+  int _selectedEpisodePage = 0;
+  int get selectedEpisodePage => _selectedEpisodePage;
+  List<List<AnimeEpisode>>? _episodePages;
+  List<List<AnimeEpisode>>? get episodePages => _episodePages;
+
+  /* Caching: Info View */
   final Stack<InfoViewCache> _infoViewCacheStack = Stack<InfoViewCache>();
   Stack<InfoViewCache> get infoViewCacheStack => _infoViewCacheStack;
 
@@ -83,22 +91,26 @@ class ConsumetProvider extends ChangeNotifier {
   Future<void> selectAnimeAndGetInfo(AnimeResult anime) async {
     _setLoading(true);
 
-    // Update selected anime, get info for it, update current anime info & push to stack.
     _selectedAnime = anime;
     final AnimeInfo animeInfo =
         await _service.getAnimeInfoWithEpisodes(anime.id, _animeProvider);
+
     _currentAnimeInfo = animeInfo;
+
+    if (animeInfo.episodes!.isNotEmpty) await _paginateEpisodeList();
+
     _infoViewCacheStack.push(
       InfoViewCache(
         animeInfo: _currentAnimeInfo!,
         animeResult: _selectedAnime!,
+        episodePages: _episodePages,
       ),
     );
 
     _setLoading(false);
   }
 
-  void replaceAnimeInfoWithPrevious() {
+  Future<void> replaceAnimeInfoWithPrevious() async {
     _setLoading(true);
 
     // Pop info item from stack & update current anime info with queue.first's value.
@@ -108,6 +120,8 @@ class ConsumetProvider extends ChangeNotifier {
       final InfoViewCache previous = _infoViewCacheStack.queue.first;
       _selectedAnime = previous.animeResult;
       _currentAnimeInfo = previous.animeInfo;
+      _episodePages = previous.episodePages;
+      _selectedEpisodePage = 0;
     }
 
     _setLoading(false);
@@ -125,6 +139,39 @@ class ConsumetProvider extends ChangeNotifier {
     final Source? episodeSource = await _service
         .getStreamingLinksFromEpisodeId(selectedEpisode!.episodeId);
     _currentEpisodeSource = episodeSource;
+
+    _setLoading(false);
+  }
+
+  Future<void> updateSelectedEpisodePage(int pageNumber) async {
+    _setLoading(true);
+    _selectedEpisodePage = pageNumber;
+    _setLoading(false);
+  }
+
+  Future<void> _paginateEpisodeList() async {
+    _setLoading(true);
+
+    // Initialise _episodePages as a list, reset selected page.
+    _episodePages = [];
+    _selectedEpisodePage = 0;
+
+    List<AnimeEpisode> page = [];
+    for (int i = 0; i < _currentAnimeInfo!.episodes!.length; i++) {
+      final AnimeEpisode episode = _currentAnimeInfo!.episodes![i];
+
+      // If not a page boundary, add to page and continue.
+      if (!(i > 0 && i % 25 == 0)) {
+        page.add(episode);
+        continue;
+      }
+
+      // Otherwise, add page to _episodePages and reset page to [].
+      _episodePages!.add(page);
+      page = [];
+    }
+
+    page.isNotEmpty ? _episodePages!.add(page) : null;
 
     _setLoading(false);
   }
