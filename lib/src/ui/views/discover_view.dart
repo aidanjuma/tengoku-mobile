@@ -24,25 +24,6 @@ class _DiscoverViewState extends State<DiscoverView> {
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      /* Header with Tengoku Logo */
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(height * 0.15),
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: width * 0.05,
-            vertical: height * 0.025,
-          ),
-          child: const Align(
-            alignment: Alignment.centerLeft,
-            child: Image(
-              width: 96,
-              height: 64,
-              image: AssetImage('assets/images/tengoku-logo.png'),
-            ),
-          ),
-        ),
-      ),
       /* Body: Banner BG Image, Basic Info & Cover Image for Featured Content */
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -152,6 +133,24 @@ class _DiscoverViewState extends State<DiscoverView> {
                       ),
                     ),
                   ),
+                  /* Header with Tengoku Logo */
+                  Positioned(
+                    top: height * 0.05,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                        horizontal: width * 0.05,
+                        vertical: height * 0.025,
+                      ),
+                      child: const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Image(
+                          width: 96,
+                          height: 64,
+                          image: AssetImage('assets/images/tengoku-logo.png'),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

@@ -371,14 +371,13 @@ class _CustomPlayerControlsState extends State<CustomPlayerControls>
           width: double.infinity,
           alignment: Alignment.bottomCenter,
           margin: const EdgeInsets.symmetric(vertical: 32),
-          child: Column(children: <Widget>[
-            Row(
-              // TODO: Additional Icons + Functionality...
-              children: <Widget>[],
-            ),
-            _buildProgressBar(),
-            _buildTimeProgression(),
-          ]),
+          // TODO: Additional Icons + Functionality (in a Row() widget).
+          child: Column(
+            children: <Widget>[
+              _buildProgressBar(),
+              _buildTimeProgression(),
+            ],
+          ),
         ),
       ),
     );
