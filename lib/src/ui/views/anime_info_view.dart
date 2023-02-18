@@ -199,6 +199,8 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                   animeInfo.episodes!;
                               List<List<AnimeEpisode>>? episodePages =
                                   consumetProvider.episodePages;
+                              int selectedEpisodePage =
+                                  consumetProvider.selectedEpisodePage;
 
                               /* Relations, Genres & Episodes List */
                               return Column(
@@ -276,29 +278,51 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                     child: Builder(builder: (context) {
                                       if (episodePages != null) {
                                         List<EpisodeTile> tiles =
-                                            mapEpisodeTiles(episodes);
+                                            mapEpisodeTiles(
+                                          episodePages[selectedEpisodePage],
+                                        );
                                         /* Episodes List Widget */
-                                        return SizedBox(
+                                        return Container(
                                           width: double.infinity,
+                                          padding: EdgeInsets.only(
+                                            bottom: height * 0.04,
+                                          ),
                                           child: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: <Widget>[
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                  bottom: height * 0.01,
-                                                ),
-                                                child: Text(
-                                                  'Episodes',
-                                                  style: TextStyle(
-                                                    fontFamily: 'Lexend',
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 14,
-                                                    color: colors.onSurface,
-                                                  ),
+                                              Text(
+                                                'Episodes',
+                                                style: TextStyle(
+                                                  fontFamily: 'Lexend',
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                  color: colors.onSurface,
                                                 ),
                                               ),
+                                              episodePages.length > 1
+                                                  ? Container(
+                                                      width: double.infinity,
+                                                      height: height * 0.035,
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                        vertical: height * 0.01,
+                                                      ),
+                                                      child: Row(
+                                                        children: <Widget>[
+                                                          ContentSlider(
+                                                            direction:
+                                                                Axis.horizontal,
+                                                            panels:
+                                                                mapPagePills(
+                                                              episodePages,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  : const SizedBox.shrink(),
                                               ContentSlider(
                                                 direction: Axis.vertical,
                                                 panels: tiles,

@@ -32,7 +32,14 @@ class PagePill extends StatelessWidget {
               color: Theme.of(context).colorScheme.onBackground,
             ),
             child: Center(
-              child: Text('$lowerBound-$upperBound'),
+              child: Text(
+                '$lowerBound-$upperBound',
+                style: const TextStyle(
+                  fontFamily: 'DM Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 11,
+                ),
+              ),
             ),
           ),
         );

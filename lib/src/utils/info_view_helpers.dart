@@ -4,6 +4,7 @@ import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/enums/genres.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/ui/components/panels/pills/page_pill.dart';
 import 'package:tengoku/src/ui/components/panels/pills/genres_pill.dart';
 import 'package:tengoku/src/ui/components/panels/tiles/episode_tile.dart';
 import 'package:tengoku/src/ui/components/panels/cards/relation_card.dart';
@@ -51,18 +52,6 @@ List<GenresPill> mapGenresPills(List<Genres> genres) {
   return pills;
 }
 
-List<EpisodeTile> mapEpisodeTiles(List<AnimeEpisode> episodes) {
-  List<EpisodeTile> tiles = [];
-
-  /* Map n episode(s) to n EpisodeTile(s) */
-  for (int i = 0; i < episodes.length; i++) {
-    final episode = episodes[i];
-    tiles.add(EpisodeTile(episode: episode));
-  }
-
-  return tiles;
-}
-
 List<RelationCard> mapRelationsCards(List<AnimeResult> relations) {
   List<RelationCard> cards = [];
 
@@ -80,4 +69,36 @@ List<RelationCard> mapRelationsCards(List<AnimeResult> relations) {
   }
 
   return cards;
+}
+
+List<EpisodeTile> mapEpisodeTiles(List<AnimeEpisode> episodes) {
+  List<EpisodeTile> tiles = [];
+
+  /* Map n episode(s) to n EpisodeTile(s) */
+  for (int i = 0; i < episodes.length; i++) {
+    final episode = episodes[i];
+    tiles.add(EpisodeTile(episode: episode));
+  }
+
+  return tiles;
+}
+
+List<PagePill> mapPagePills(List<List<AnimeEpisode>> episodePages) {
+  List<PagePill> pills = [];
+
+  for (int i = 0; i < episodePages.length; i++) {
+    final page = episodePages[i];
+    pills.add(
+      PagePill(
+        id: i,
+        lowerBound: page.first.number,
+        upperBound: page.last.number,
+        spacing: i < episodePages.length
+            ? const EdgeInsets.only(right: 8)
+            : const EdgeInsets.only(left: 8),
+      ),
+    );
+  }
+
+  return pills;
 }

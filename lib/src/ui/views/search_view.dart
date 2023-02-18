@@ -16,7 +16,6 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-  late Debouncer searchDebouncer;
   final _debouncer = Debouncer(milliseconds: 500);
 
   @override
