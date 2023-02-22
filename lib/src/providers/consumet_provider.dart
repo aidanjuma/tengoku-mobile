@@ -66,6 +66,13 @@ class ConsumetProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
+  Future<void> resetSearch() async {
+    _setLoading(true);
+    _latestQuery = '';
+    _animeResults = null;
+    _setLoading(false);
+  }
+
   Future<void> getTrendingAnime(int? page, int? resultsPerPage) async {
     _setLoading(true);
 
@@ -97,7 +104,7 @@ class ConsumetProvider extends ChangeNotifier {
 
     _currentAnimeInfo = animeInfo;
 
-    if (animeInfo.episodes!.isNotEmpty) await _paginateEpisodeList();
+    if (animeInfo.episodes!.isNotEmpty) _paginateEpisodeList();
 
     _infoViewCacheStack.push(
       InfoViewCache(
@@ -110,7 +117,7 @@ class ConsumetProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> replaceAnimeInfoWithPrevious() async {
+  Future<void> popAnimeFromStack() async {
     _setLoading(true);
 
     // Pop info item from stack & update current anime info with queue.first's value.
@@ -125,6 +132,19 @@ class ConsumetProvider extends ChangeNotifier {
     }
 
     _setLoading(false);
+  }
+
+  Future<void> clearCachedInfo() async {
+    _setLoading(true);
+
+    _selectedAnime = null;
+    _currentAnimeInfo = null;
+    _episodePages = null;
+    _selectedEpisodePage = 0;
+
+    _infoViewCacheStack.clear();
+
+    _setLoading(true);
   }
 
   Future<void> selectEpisode(AnimeEpisode episode) async {
@@ -149,9 +169,7 @@ class ConsumetProvider extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> _paginateEpisodeList() async {
-    _setLoading(true);
-
+  void _paginateEpisodeList() {
     // Initialise _episodePages as a list, reset selected page.
     _episodePages = [];
     _selectedEpisodePage = 0;
@@ -172,8 +190,6 @@ class ConsumetProvider extends ChangeNotifier {
     }
 
     page.isNotEmpty ? _episodePages!.add(page) : null;
-
-    _setLoading(false);
   }
 
   void _setLoading(bool value) {

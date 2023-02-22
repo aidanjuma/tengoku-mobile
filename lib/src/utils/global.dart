@@ -8,7 +8,7 @@ import 'package:tengoku/src/enums/media_status.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/isar_provider.dart';
 import 'package:tengoku/src/router/navigator_wrapper.dart';
-import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
+import 'package:tengoku/src/ui/components/cards/content_card.dart';
 
 const Map<String, MediaStatus> mediaStatusOptions = {
   'Ongoing': MediaStatus.ongoing,

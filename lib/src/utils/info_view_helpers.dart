@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/enums/genres.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/models/anime_result.dart';
-import 'package:tengoku/src/ui/components/panels/pills/page_pill.dart';
-import 'package:tengoku/src/ui/components/panels/pills/genres_pill.dart';
-import 'package:tengoku/src/ui/components/panels/tiles/episode_tile.dart';
-import 'package:tengoku/src/ui/components/panels/cards/relation_card.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
+import 'package:tengoku/src/ui/components/pills/page_pill.dart';
+import 'package:tengoku/src/ui/components/pills/genres_pill.dart';
+import 'package:tengoku/src/ui/components/tiles/episode_tile.dart';
+import 'package:tengoku/src/ui/components/cards/relation_card.dart';
+
+Future<void> loadAnimeInfo(
+    ConsumetProvider consumetProvider, AnimeResult result) async {
+  await consumetProvider.clearCachedInfo();
+  await consumetProvider.selectAnimeAndGetInfo(result);
+}
 
 Widget renderBackgroundImage(double height) {
   return Consumer<ConsumetProvider>(
     builder: (context, consumetProvider, child) {
-      String? image = consumetProvider.selectedAnime!.bannerImage;
+      String? image = consumetProvider.selectedAnime?.bannerImage;
       // Should theoretically always have cover image; fallback if no bannerImage.
-      image ??= consumetProvider.selectedAnime!.coverImage;
+      image ??= consumetProvider.selectedAnime?.coverImage;
+
       return Container(
         width: double.infinity,
         height: height * 0.355,

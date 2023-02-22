@@ -7,6 +7,10 @@ class Stack<T> {
     queue.addFirst(item);
   }
 
+  void clear() {
+    queue.clear();
+  }
+
   T pop() {
     final T first = queue.first;
     queue.removeFirst();

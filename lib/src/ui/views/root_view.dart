@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:tengoku/src/ui/views/search_view.dart';
+import 'package:tengoku/src/ui/views/discover_view.dart';
+import 'package:tengoku/src/providers/consumet_provider.dart';
 import 'package:tengoku/src/utils/android_navigation_mode.dart';
 import 'package:tengoku/src/ui/components/navigation/navigation_bar.dart'
     as nav;
-import 'package:tengoku/src/ui/views/discover_view.dart';
-import 'package:tengoku/src/ui/views/search_view.dart';
 
 class RootView extends StatefulWidget {
   const RootView({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _RootViewState extends State<RootView> {
         if (navigationMode == DeviceNavigationMode.threeButton) {
           return SafeArea(child: _rootViewPage());
         }
+
         // NOT three-button navigation...
         return _rootViewPage();
       },
@@ -43,7 +46,11 @@ class _RootViewState extends State<RootView> {
           nav.NavigationBarItem(icon: EvaIcons.searchOutline),
           nav.NavigationBarItem(icon: EvaIcons.listOutline),
         ],
-        onChanged: (int index) {
+        onChanged: (int index) async {
+          if (_currentIndex == 1) {
+            await Provider.of<ConsumetProvider>(context, listen: false)
+                .resetSearch();
+          }
           _currentIndex = index;
           setState(() => {});
         },

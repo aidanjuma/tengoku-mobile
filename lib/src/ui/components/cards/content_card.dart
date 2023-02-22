@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/utils/info_view_helpers.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 
 class ContentCard extends StatelessWidget {
@@ -23,7 +24,7 @@ class ContentCard extends StatelessWidget {
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 50),
           onPressed: () {
-            consumetProvider.selectAnimeAndGetInfo(result);
+            loadAnimeInfo(consumetProvider, result);
             selectAnimeOrMangaInfoView(context, result);
           },
           child: Container(
@@ -58,6 +59,7 @@ class ContentCard extends StatelessWidget {
                   fontFamily: 'DM Sans',
                   fontWeight: FontWeight.w700,
                   fontSize: 11,
+                  color: Colors.white,
                 ),
               ),
             ),

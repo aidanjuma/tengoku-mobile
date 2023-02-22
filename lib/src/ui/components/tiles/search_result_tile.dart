@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tengoku/src/utils/global.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
+import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
+import 'package:tengoku/src/utils/info_view_helpers.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
 
 class SearchResultTile extends StatelessWidget {
@@ -25,7 +26,7 @@ class SearchResultTile extends StatelessWidget {
           scaleFactor: 0.25,
           duration: const Duration(milliseconds: 100),
           onPressed: () {
-            consumetProvider.selectAnimeAndGetInfo(result);
+            loadAnimeInfo(consumetProvider, result);
             selectAnimeOrMangaInfoView(context, result);
           },
           child: Container(

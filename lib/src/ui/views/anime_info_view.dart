@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:bouncing_widget/bouncing_widget.dart';
@@ -8,19 +9,16 @@ import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/utils/info_view_helpers.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
-import 'package:tengoku/src/ui/components/panels/pills/genres_pill.dart';
-import 'package:tengoku/src/ui/components/panels/tiles/episode_tile.dart';
-import 'package:tengoku/src/ui/components/panels/cards/relation_card.dart';
+import 'package:tengoku/src/ui/components/pills/genres_pill.dart';
+import 'package:tengoku/src/ui/components/tiles/episode_tile.dart';
+import 'package:tengoku/src/ui/components/cards/relation_card.dart';
+import 'package:tengoku/src/ui/components/sliders/default_slider.dart';
 
-class AnimeInfoView extends StatefulWidget {
+bool bypassWillPopScope = false;
+
+class AnimeInfoView extends StatelessWidget {
   const AnimeInfoView({super.key});
 
-  @override
-  State<AnimeInfoView> createState() => _AnimeInfoViewState();
-}
-
-class _AnimeInfoViewState extends State<AnimeInfoView> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -31,9 +29,8 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
       builder: (context, consumetProvider, child) {
         return WillPopScope(
           onWillPop: () async {
-            consumetProvider.infoViewCacheStack.queue.length > 1
-                ? await consumetProvider.replaceAnimeInfoWithPrevious()
-                : null;
+            if (Platform.isIOS || bypassWillPopScope == true) return false;
+            await _backtrack(consumetProvider);
             return true;
           },
           child: Scaffold(
@@ -50,8 +47,26 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: const Icon(EvaIcons.arrowBack),
+                    onTap: () {
+                      bypassWillPopScope = true;
+                      _backtrack(consumetProvider);
+                      bypassWillPopScope = false;
+
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 32,
+                      height: 32,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(9999),
+                      ),
+                      child: const Icon(
+                        EvaIcons.arrowBack,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -239,7 +254,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                                     ),
                                                   ),
                                                 ),
-                                                ContentSlider(
+                                                DefaultSlider(
                                                   direction: Axis.horizontal,
                                                   panels: cards,
                                                 ),
@@ -262,7 +277,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                         height: height * 0.035,
                                         child: Row(
                                           children: <Widget>[
-                                            ContentSlider(
+                                            DefaultSlider(
                                               direction: Axis.horizontal,
                                               panels: pills,
                                             ),
@@ -311,7 +326,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                                       ),
                                                       child: Row(
                                                         children: <Widget>[
-                                                          ContentSlider(
+                                                          DefaultSlider(
                                                             direction:
                                                                 Axis.horizontal,
                                                             panels:
@@ -323,7 +338,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
                                                       ),
                                                     )
                                                   : const SizedBox.shrink(),
-                                              ContentSlider(
+                                              DefaultSlider(
                                                 direction: Axis.vertical,
                                                 panels: tiles,
                                               ),
@@ -352,13 +367,7 @@ class _AnimeInfoViewState extends State<AnimeInfoView> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> _backtrack(ConsumetProvider consumetProvider) async {
+    await consumetProvider.popAnimeFromStack();
   }
 }

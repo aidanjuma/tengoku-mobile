@@ -21,6 +21,7 @@ class CurrentlyWatchingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
 
     return Consumer2<ConsumetProvider, IsarProvider>(
       builder: (context, consumetProvider, isarProvider, child) {
@@ -28,14 +29,12 @@ class CurrentlyWatchingCard extends StatelessWidget {
           scaleFactor: 0.5,
           duration: const Duration(milliseconds: 50),
           onPressed: () {
-            isarProvider.setCurrentAnimeIfStored(episode.parentIsarId!);
-            consumetProvider.selectAnimeAndGetInfo(isarProvider.currentAnime!);
-            consumetProvider.selectEpisode(episode);
-            registerWatchingEpisode(isarProvider, episode);
+            _restartWatchSession(consumetProvider, isarProvider);
             NavigatorWrapper.push(context, Routes.player);
           },
           child: Container(
-            width: width * 0.49,
+            width: width * 0.65,
+            height: height * 0.2,
             margin: spacing,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
@@ -111,5 +110,13 @@ class CurrentlyWatchingCard extends StatelessWidget {
         );
       },
     );
+  }
+
+  Future<void> _restartWatchSession(
+      ConsumetProvider consumetProvider, IsarProvider isarProvider) async {
+    await isarProvider.setCurrentAnimeIfStored(episode.parentIsarId!);
+    await consumetProvider.selectAnimeAndGetInfo(isarProvider.currentAnime!);
+    await consumetProvider.selectEpisode(episode);
+    await registerWatchingEpisode(isarProvider, episode);
   }
 }

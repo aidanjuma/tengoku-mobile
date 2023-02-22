@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class ContentSlider extends StatelessWidget {
+class DefaultSlider extends StatelessWidget {
   final Axis direction;
   final List<Widget> panels;
 
-  const ContentSlider({
+  const DefaultSlider({
     super.key,
     required this.direction,
     required this.panels,

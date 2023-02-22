@@ -5,8 +5,8 @@ import 'package:tengoku/src/utils/debouncer.dart';
 import 'package:tengoku/src/enums/media_status.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
-import 'package:tengoku/src/ui/components/panels/tiles/search_result_tile.dart';
+import 'package:tengoku/src/ui/components/sliders/default_slider.dart';
+import 'package:tengoku/src/ui/components/tiles/search_result_tile.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({super.key});
@@ -89,7 +89,7 @@ class _SearchViewState extends State<SearchView> {
 
             return Column(
               children: <Widget>[
-                ContentSlider(
+                DefaultSlider(
                   direction: Axis.vertical,
                   panels: tiles,
                 ),

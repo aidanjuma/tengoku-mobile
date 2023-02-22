@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:tengoku/src/utils/global.dart';
 import 'package:tengoku/src/models/anime_result.dart';
 import 'package:tengoku/src/models/anime_episode.dart';
 import 'package:tengoku/src/providers/isar_provider.dart';
 import 'package:tengoku/src/providers/consumet_provider.dart';
-import 'package:tengoku/src/ui/components/sliders/content_slider.dart';
-import 'package:tengoku/src/ui/components/panels/cards/content_card.dart';
-import 'package:tengoku/src/ui/components/panels/cards/currently_watching_card.dart';
+import 'package:tengoku/src/ui/components/cards/content_card.dart';
+import 'package:tengoku/src/ui/components/sliders/default_slider.dart';
+import 'package:tengoku/src/ui/components/cards/currently_watching_card.dart';
+import 'package:tengoku/src/ui/components/sections/featured_content_section.dart';
 
 class DiscoverView extends StatefulWidget {
   const DiscoverView({super.key});
@@ -29,137 +29,20 @@ class _DiscoverViewState extends State<DiscoverView> {
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: <Widget>[
-            SizedBox(
-              width: double.infinity,
-              height: height * 0.475,
-              child: Stack(
-                fit: StackFit.loose,
-                children: <Widget>[
-                  /* Banner BG Image */
-                  Container(
-                    width: double.infinity,
-                    height: height * 0.425,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: const AssetImage(
-                          'assets/images/featured/spy-x-family-part-2-banner.jpg',
-                        ),
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.2),
-                          BlendMode.darken,
-                        ),
-                      ),
-                    ),
-                  ),
-                  /* Aligned Container: Snap to Bottom of SizedBox */
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      height: 226,
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.025),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          /* Left: Cover Image */
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Container(
-                              width: 160,
-                              height: 226,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                image: const DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                    'assets/images/featured/spy-x-family-part-2-cover.jpg',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          /* Right: Basic Info */
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  const Text(
-                                    'SPY×FAMILY Part 2',
-                                    style: TextStyle(
-                                      fontFamily: 'DM Sans',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 22,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        const Icon(
-                                          EvaIcons.star,
-                                          size: 18,
-                                          color: Color(0xfff7d16f),
-                                        ),
-                                        Container(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: const Text(
-                                            '8.6/10',
-                                            style: TextStyle(
-                                              fontFamily: 'Lexend',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  /* Header with Tengoku Logo */
-                  Positioned(
-                    top: height * 0.05,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: width * 0.05,
-                        vertical: height * 0.025,
-                      ),
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Image(
-                          width: 96,
-                          height: 64,
-                          image: AssetImage('assets/images/tengoku-logo.png'),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
+            const FeaturedContentSection(
+              rating: 86,
+              mediaName: 'SPY×FAMILY Part 2',
+              bannerImagePath:
+                  'assets/images/featured/spy-x-family-part-2-banner.jpg',
+              coverImagePath:
+                  'assets/images/featured/spy-x-family-part-2-cover.jpg',
             ),
             Container(
+              width: double.infinity,
               padding: EdgeInsets.symmetric(
                 horizontal: width * 0.05,
                 vertical: height * 0.025,
               ),
-              width: double.infinity,
               child: Consumer2<ConsumetProvider, IsarProvider>(
                 builder: (context, consumetProvider, isarProvider, child) {
                   // Various Data Sources:
@@ -230,7 +113,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                                     ),
                                   ),
                                   trendingAnimeCards != null && consumetIsReady
-                                      ? ContentSlider(
+                                      ? DefaultSlider(
                                           direction: Axis.horizontal,
                                           panels: trendingAnimeCards,
                                         )
@@ -267,7 +150,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                                     ),
                                   ),
                                   consumetIsReady
-                                      ? ContentSlider(
+                                      ? DefaultSlider(
                                           direction: Axis.horizontal,
                                           panels: popularAnimeCards!,
                                         )
@@ -286,7 +169,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                             if (currentlyWatchingCards != null) {
                               return SizedBox(
                                 width: double.infinity,
-                                height: height * 0.175,
+                                height: height * 0.2,
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +188,7 @@ class _DiscoverViewState extends State<DiscoverView> {
                                       ),
                                     ),
                                     isarIsReady
-                                        ? ContentSlider(
+                                        ? DefaultSlider(
                                             direction: Axis.horizontal,
                                             panels: currentlyWatchingCards,
                                           )
